@@ -15,7 +15,7 @@ class StockPicking(models.Model):
     )
     shipment_count = fields.Integer(
         compute="_compute_shipment_count",
-        string="Envíos",
+        string="Nº envíos",
     )
 
     def _compute_shipment_count(self):

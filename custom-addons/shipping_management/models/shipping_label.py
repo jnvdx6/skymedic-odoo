@@ -22,7 +22,7 @@ class ShippingLabel(models.Model):
     )
     attachment_id = fields.Many2one(
         "ir.attachment",
-        string="Archivo",
+        string="Adjunto",
         required=True,
         ondelete="cascade",
     )

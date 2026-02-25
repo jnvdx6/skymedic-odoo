@@ -144,7 +144,7 @@ class ShippingShipment(models.Model):
     )
     label_count = fields.Integer(
         compute="_compute_label_count",
-        string="Etiquetas",
+        string="Nº etiquetas",
     )
 
     # ---- Computed ----
