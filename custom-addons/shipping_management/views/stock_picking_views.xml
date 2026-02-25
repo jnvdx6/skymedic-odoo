@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Smart button on stock.picking form -->
+    <record id="view_picking_form_shipping" model="ir.ui.view">
+        <field name="name">stock.picking.form.shipping.management</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button name="action_view_shipments"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-truck"
+                        invisible="shipment_count == 0">
+                    <field name="shipment_count" widget="statinfo"
+                           string="Envíos"/>
+                </button>
+            </div>
+        </field>
+    </record>
+
+</odoo>

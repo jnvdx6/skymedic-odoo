@@ -1,0 +1,26 @@
+{
+    "name": "Shipping Management",
+    "summary": "Hub centralizado de gestión de envíos en Inventario",
+    "version": "19.0.1.0.0",
+    "category": "Inventory/Delivery",
+    "author": "Skymedic",
+    "website": "https://skymedic.es",
+    "license": "AGPL-3",
+    "depends": [
+        "stock_delivery",
+        "delivery_carrier_account",
+    ],
+    "data": [
+        "security/ir.model.access.csv",
+        "security/shipping_security.xml",
+        "data/shipping_data.xml",
+        "data/shipping_cron.xml",
+        "wizard/shipping_batch_wizard.xml",
+        "views/shipping_shipment_views.xml",
+        "views/shipping_label_views.xml",
+        "views/stock_picking_views.xml",
+        "views/shipping_menu.xml",
+    ],
+    "installable": True,
+    "application": False,
+}

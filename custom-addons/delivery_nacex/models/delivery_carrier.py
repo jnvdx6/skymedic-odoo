@@ -327,6 +327,100 @@ class NacexDeliveryCarrier(models.Model):
         self.ensure_one()
         return self._nacex_request("putRecogida", data, picking)
 
+    # ---- Shipping Management bridge ----
+
+    def _nacex_update_shipment_status(self, shipment):
+        """Update a shipping.shipment tracking status from NACEX API."""
+        self.ensure_one()
+        if not shipment.tracking_ref:
+            return
+        account = (
+            shipment.picking_id._get_carrier_account()
+            if shipment.picking_id
+            else self.carrier_account_id
+        )
+        response = self._nacex_request(
+            "getInfoEnvio",
+            {"albaran": shipment.tracking_ref, "tipo": "E"},
+            picking=shipment.picking_id,
+            account=account,
+        )
+        shipment.write({
+            "tracking_status_raw": response,
+            "last_tracking_update": fields.Datetime.now(),
+        })
+        new_state = self._nacex_map_tracking_status(response)
+        if new_state and new_state != shipment.state:
+            shipment.write({"state": new_state})
+        shipment.message_post(
+            body=self.env._(
+                "<b>Actualización NACEX:</b><br/>%(status)s",
+                status=response,
+            ),
+        )
+
+    def _nacex_map_tracking_status(self, raw_status):
+        """Map NACEX raw status text to shipping.shipment state."""
+        if not raw_status:
+            return False
+        lower = raw_status.lower()
+        if "entregado" in lower or "delivered" in lower:
+            return "delivered"
+        if any(
+            kw in lower
+            for kw in ("tránsito", "transito", "transit", "reparto")
+        ):
+            return "in_transit"
+        if "devuelto" in lower or "returned" in lower:
+            return "returned"
+        return False
+
+    def _nacex_reprint_shipment_label(self, shipment):
+        """Re-fetch and attach a NACEX label to the shipment."""
+        self.ensure_one()
+        if not shipment.expedition_code:
+            raise UserError(
+                self.env._(
+                    "No hay código de expedición para reimprimir la etiqueta."
+                )
+            )
+        account = (
+            shipment.picking_id._get_carrier_account()
+            if shipment.picking_id
+            else self.carrier_account_id
+        )
+        label_text = self._nacex_request(
+            "getEtiqueta",
+            {"codExp": shipment.expedition_code, "modelo": "PDF_B"},
+            picking=shipment.picking_id,
+            account=account,
+        )
+        label_b64 = (
+            label_text.replace("-", "+").replace("_", "/").replace("*", "=")
+        )
+        pdf_data = base64.b64decode(label_b64)
+        attachment = self.env["ir.attachment"].create({
+            "name": f"{shipment.tracking_ref or shipment.name}_reprint.pdf",
+            "type": "binary",
+            "datas": base64.b64encode(pdf_data),
+            "res_model": "shipping.shipment",
+            "res_id": shipment.id,
+            "mimetype": "application/pdf",
+        })
+        # Create shipping.label record if the model is available
+        if "shipping.label" in self.env:
+            self.env["shipping.label"].create({
+                "shipment_id": shipment.id,
+                "attachment_id": attachment.id,
+                "label_type": "reprint",
+            })
+        shipment.message_post(
+            body=self.env._(
+                "Etiqueta reimpresa para %(ref)s",
+                ref=shipment.tracking_ref or shipment.name,
+            ),
+        )
+
     # ---- Test connection ----
 
     def nacex_action_test_connection(self):

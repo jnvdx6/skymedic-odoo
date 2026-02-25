@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============================================================ -->
+    <!-- SECCIÓN PRINCIPAL: ENVÍOS (bajo Inventario)                   -->
+    <!-- ============================================================ -->
+    <menuitem
+        id="menu_shipping_root"
+        name="Envíos"
+        parent="stock.menu_stock_root"
+        sequence="3"
+        groups="stock.group_stock_user"
+    />
+
+    <!-- ============================================================ -->
+    <!-- SUBMENÚS OPERATIVOS                                           -->
+    <!-- ============================================================ -->
+
+    <!-- Todos los envíos (sin filtro por defecto) -->
+    <record id="action_shipping_shipment_all" model="ir.actions.act_window">
+        <field name="name">Todos los envíos</field>
+        <field name="res_model">shipping.shipment</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="search_view_id" ref="view_shipping_shipment_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No hay envíos registrados
+            </p>
+            <p>
+                Los envíos se crean automáticamente al validar una orden
+                de entrega con transportista asignado.
+            </p>
+        </field>
+    </record>
+
+    <menuitem
+        id="menu_shipments_all"
+        name="Todos los envíos"
+        parent="menu_shipping_root"
+        action="action_shipping_shipment_all"
+        sequence="1"
+    />
+
+    <!-- Envíos activos (confirmados + en tránsito) -->
+    <menuitem
+        id="menu_shipments_active"
+        name="Envíos activos"
+        parent="menu_shipping_root"
+        action="action_shipping_shipment"
+        sequence="2"
+    />
+
+    <!-- Envíos entregados -->
+    <record id="action_shipping_shipment_delivered" model="ir.actions.act_window">
+        <field name="name">Envíos entregados</field>
+        <field name="res_model">shipping.shipment</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="search_view_id" ref="view_shipping_shipment_search"/>
+        <field name="context">{'search_default_filter_delivered': 1}</field>
+    </record>
+
+    <menuitem
+        id="menu_shipments_delivered"
+        name="Entregados"
+        parent="menu_shipping_root"
+        action="action_shipping_shipment_delivered"
+        sequence="3"
+    />
+
+    <!-- ============================================================ -->
+    <!-- ETIQUETAS                                                     -->
+    <!-- ============================================================ -->
+    <menuitem
+        id="menu_shipment_labels"
+        name="Etiquetas emitidas"
+        parent="menu_shipping_root"
+        action="action_shipping_label"
+        sequence="10"
+    />
+
+    <!-- ============================================================ -->
+    <!-- CONFIGURACIÓN DE ENVÍOS                                       -->
+    <!-- ============================================================ -->
+    <menuitem
+        id="menu_shipping_config"
+        name="Configuración"
+        parent="menu_shipping_root"
+        sequence="90"
+        groups="stock.group_stock_manager"
+    />
+
+    <!-- Transportistas (link to existing carrier action) -->
+    <record id="action_shipping_carriers" model="ir.actions.act_window">
+        <field name="name">Transportistas</field>
+        <field name="res_model">delivery.carrier</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem
+        id="menu_shipping_carriers"
+        name="Transportistas"
+        parent="menu_shipping_config"
+        action="action_shipping_carriers"
+        sequence="1"
+    />
+
+    <!-- Cuentas de transportista (link to existing carrier account action) -->
+    <record id="action_shipping_carrier_accounts" model="ir.actions.act_window">
+        <field name="name">Cuentas de transportista</field>
+        <field name="res_model">carrier.account</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem
+        id="menu_shipping_carrier_accounts"
+        name="Cuentas"
+        parent="menu_shipping_config"
+        action="action_shipping_carrier_accounts"
+        sequence="2"
+    />
+
+</odoo>

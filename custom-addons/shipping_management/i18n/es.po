@@ -1,0 +1,58 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * shipping_management
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-02-25 00:00+0000\n"
+"PO-Revision-Date: 2026-02-25 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: Spanish\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. module: shipping_management
+#: model:ir.model,name:shipping_management.model_shipping_shipment
+msgid "Shipping Shipment"
+msgstr "Envío"
+
+#. module: shipping_management
+#: model:ir.model,name:shipping_management.model_shipping_batch_wizard
+msgid "Shipping Batch Wizard"
+msgstr "Asistente de operaciones masivas de envíos"
+
+#. module: shipping_management
+msgid "New"
+msgstr "Nuevo"
+
+#. module: shipping_management
+msgid "No hay etiquetas disponibles para este envío."
+msgstr "No hay etiquetas disponibles para este envío."
+
+#. module: shipping_management
+msgid "Reimpresión de etiquetas no soportada para %s."
+msgstr "Reimpresión de etiquetas no soportada para %s."
+
+#. module: shipping_management
+msgid "No se han seleccionado envíos."
+msgstr "No se han seleccionado envíos."
+
+#. module: shipping_management
+msgid "Seguimiento actualizado"
+msgstr "Seguimiento actualizado"
+
+#. module: shipping_management
+msgid "Se ha actualizado el seguimiento de %d envío(s)."
+msgstr "Se ha actualizado el seguimiento de %d envío(s)."
+
+#. module: shipping_management
+msgid "No hay etiquetas disponibles para los envíos seleccionados."
+msgstr "No hay etiquetas disponibles para los envíos seleccionados."
+
+#. module: shipping_management
+msgid "Etiquetas de envío"
+msgstr "Etiquetas de envío"

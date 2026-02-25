@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============================================================ -->
+    <!-- FORM VIEW                                                     -->
+    <!-- ============================================================ -->
+    <record id="view_shipping_shipment_form" model="ir.ui.view">
+        <field name="name">shipping.shipment.form</field>
+        <field name="model">shipping.shipment</field>
+        <field name="arch" type="xml">
+            <form string="Envío">
+                <header>
+                    <button name="action_confirm"
+                            string="Confirmar"
+                            type="object"
+                            class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_mark_in_transit"
+                            string="En tránsito"
+                            type="object"
+                            invisible="state != 'confirmed'"/>
+                    <button name="action_mark_delivered"
+                            string="Entregado"
+                            type="object"
+                            class="btn-primary"
+                            invisible="state not in ('confirmed', 'in_transit')"/>
+                    <button name="action_cancel"
+                            string="Cancelar"
+                            type="object"
+                            invisible="state not in ('draft', 'confirmed')"
+                            confirm="¿Está seguro de que desea cancelar este envío?"/>
+                    <button name="action_mark_returned"
+                            string="Devuelto"
+                            type="object"
+                            invisible="state not in ('in_transit', 'delivered')"/>
+                    <button name="action_reset_to_draft"
+                            string="Volver a borrador"
+                            type="object"
+                            invisible="state != 'cancelled'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,confirmed,in_transit,delivered"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_labels"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-file-pdf-o"
+                                invisible="label_count == 0">
+                            <field name="label_count" widget="statinfo"
+                                   string="Etiquetas"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Envío">
+                            <field name="picking_id"/>
+                            <field name="partner_id"/>
+                            <field name="origin"/>
+                            <field name="ship_date"/>
+                            <field name="delivery_date"/>
+                        </group>
+                        <group string="Transportista">
+                            <field name="carrier_id"/>
+                            <field name="carrier_type"/>
+                            <field name="tracking_ref"/>
+                            <field name="expedition_code"/>
+                            <field name="number_of_packages"/>
+                            <field name="shipping_weight"/>
+                            <field name="shipping_cost"/>
+                        </group>
+                    </group>
+                    <group string="Seguimiento">
+                        <div class="d-flex gap-2 mb-3" colspan="2">
+                            <button name="action_refresh_tracking"
+                                    string="Actualizar seguimiento"
+                                    type="object"
+                                    class="btn-secondary"
+                                    icon="fa-refresh"
+                                    invisible="not tracking_ref"/>
+                            <button name="action_reprint_label"
+                                    string="Reimprimir etiqueta"
+                                    type="object"
+                                    class="btn-secondary"
+                                    icon="fa-print"
+                                    invisible="not expedition_code"/>
+                        </div>
+                        <field name="tracking_url" widget="url"/>
+                        <field name="last_tracking_update"/>
+                        <field name="tracking_status_raw" readonly="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Etiquetas" name="labels">
+                            <field name="label_ids">
+                                <list editable="bottom" create="0" delete="0">
+                                    <field name="create_date"
+                                           string="Fecha de emisión"
+                                           readonly="1"/>
+                                    <field name="label_type" readonly="1"/>
+                                    <field name="file_name" readonly="1"/>
+                                    <field name="file_size" readonly="1"
+                                           optional="hide"/>
+                                    <button name="action_download"
+                                            type="object"
+                                            string="Descargar"
+                                            icon="fa-download"
+                                            class="btn-link"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- LIST VIEW                                                     -->
+    <!-- ============================================================ -->
+    <record id="view_shipping_shipment_list" model="ir.ui.view">
+        <field name="name">shipping.shipment.list</field>
+        <field name="model">shipping.shipment</field>
+        <field name="arch" type="xml">
+            <list string="Envíos" default_order="create_date desc"
+                  multi_edit="1">
+                <field name="name" decoration-bf="1"/>
+                <field name="partner_id"/>
+                <field name="carrier_id"/>
+                <field name="carrier_type" optional="hide"/>
+                <field name="tracking_ref"/>
+                <field name="origin" optional="show"/>
+                <field name="ship_date"/>
+                <field name="delivery_date" optional="hide"/>
+                <field name="number_of_packages" optional="hide"/>
+                <field name="shipping_cost" optional="show" sum="Total"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-primary="state == 'confirmed'"
+                       decoration-warning="state == 'in_transit'"
+                       decoration-success="state == 'delivered'"
+                       decoration-danger="state in ('cancelled', 'returned')"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- KANBAN VIEW                                                   -->
+    <!-- ============================================================ -->
+    <record id="view_shipping_shipment_kanban" model="ir.ui.view">
+        <field name="name">shipping.shipment.kanban</field>
+        <field name="model">shipping.shipment</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_mobile">
+                <templates>
+                    <t t-name="card">
+                        <div class="d-flex justify-content-between mb-1">
+                            <strong>
+                                <field name="name"/>
+                            </strong>
+                            <field name="state" widget="label_selection"
+                                   options="{'classes': {
+                                       'draft': 'info',
+                                       'confirmed': 'primary',
+                                       'in_transit': 'warning',
+                                       'delivered': 'success',
+                                       'cancelled': 'danger',
+                                       'returned': 'danger'
+                                   }}"/>
+                        </div>
+                        <div class="mb-1">
+                            <field name="partner_id"/>
+                        </div>
+                        <div class="text-muted small mb-1">
+                            <field name="carrier_id"/> —
+                            <field name="tracking_ref"/>
+                        </div>
+                        <div class="text-muted small">
+                            <field name="ship_date"/>
+                            <span class="float-end">
+                                <field name="shipping_cost"
+                                       widget="monetary"/>
+                            </span>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- SEARCH VIEW                                                   -->
+    <!-- ============================================================ -->
+    <record id="view_shipping_shipment_search" model="ir.ui.view">
+        <field name="name">shipping.shipment.search</field>
+        <field name="model">shipping.shipment</field>
+        <field name="arch" type="xml">
+            <search string="Buscar envíos">
+                <field name="name"/>
+                <field name="tracking_ref"/>
+                <field name="partner_id"/>
+                <field name="origin"/>
+                <field name="carrier_id"/>
+                <separator/>
+                <filter name="filter_draft" string="Borrador"
+                        domain="[('state', '=', 'draft')]"/>
+                <filter name="filter_confirmed" string="Confirmado"
+                        domain="[('state', '=', 'confirmed')]"/>
+                <filter name="filter_in_transit" string="En tránsito"
+                        domain="[('state', '=', 'in_transit')]"/>
+                <filter name="filter_delivered" string="Entregado"
+                        domain="[('state', '=', 'delivered')]"/>
+                <filter name="filter_cancelled" string="Cancelado"
+                        domain="[('state', '=', 'cancelled')]"/>
+                <filter name="filter_returned" string="Devuelto"
+                        domain="[('state', '=', 'returned')]"/>
+                <separator/>
+                <filter name="filter_active" string="Activos"
+                        domain="[('state', 'in', ('confirmed', 'in_transit'))]"/>
+                <separator/>
+                <filter name="filter_today" string="Hoy"
+                        domain="[('ship_date', '&gt;=', (context_today()).strftime('%%Y-%%m-%%d'))]"/>
+                <filter name="filter_week" string="Esta semana"
+                        domain="[('ship_date', '&gt;=', (context_today() - datetime.timedelta(days=7)).strftime('%%Y-%%m-%%d'))]"/>
+                <filter name="filter_month" string="Este mes"
+                        domain="[('ship_date', '&gt;=', (context_today()).strftime('%%Y-%%m-01'))]"/>
+                <separator/>
+                <group expand="0" string="Agrupar por">
+                    <filter name="group_carrier" string="Transportista"
+                            context="{'group_by': 'carrier_id'}"/>
+                    <filter name="group_carrier_type" string="Tipo de transportista"
+                            context="{'group_by': 'carrier_type'}"/>
+                    <filter name="group_state" string="Estado"
+                            context="{'group_by': 'state'}"/>
+                    <filter name="group_ship_date" string="Fecha de envío"
+                            context="{'group_by': 'ship_date:month'}"/>
+                    <filter name="group_partner" string="Destinatario"
+                            context="{'group_by': 'partner_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- ACTIONS                                                       -->
+    <!-- ============================================================ -->
+    <record id="action_shipping_shipment" model="ir.actions.act_window">
+        <field name="name">Envíos</field>
+        <field name="res_model">shipping.shipment</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="search_view_id" ref="view_shipping_shipment_search"/>
+        <field name="context">{'search_default_filter_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No hay envíos registrados
+            </p>
+            <p>
+                Los envíos se crean automáticamente al validar una orden de
+                entrega con transportista asignado.
+            </p>
+        </field>
+    </record>
+
+
+</odoo>

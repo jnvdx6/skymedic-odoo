@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============================================================ -->
+    <!-- LABEL LIST VIEW                                               -->
+    <!-- ============================================================ -->
+    <record id="view_shipping_label_list" model="ir.ui.view">
+        <field name="name">shipping.label.list</field>
+        <field name="model">shipping.label</field>
+        <field name="arch" type="xml">
+            <list string="Etiquetas de envío" default_order="create_date desc">
+                <field name="create_date" string="Fecha de emisión"/>
+                <field name="shipment_id"/>
+                <field name="tracking_ref"/>
+                <field name="partner_id"/>
+                <field name="carrier_id"/>
+                <field name="carrier_type" optional="show"/>
+                <field name="origin" optional="show"/>
+                <field name="label_type" widget="badge"/>
+                <field name="ship_date" optional="hide"/>
+                <field name="shipment_state" widget="badge"
+                       decoration-info="shipment_state == 'draft'"
+                       decoration-primary="shipment_state == 'confirmed'"
+                       decoration-warning="shipment_state == 'in_transit'"
+                       decoration-success="shipment_state == 'delivered'"
+                       decoration-danger="shipment_state in ('cancelled', 'returned')"/>
+                <button name="action_download" type="object"
+                        string="Descargar" icon="fa-download"
+                        class="btn-link"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- LABEL FORM VIEW                                               -->
+    <!-- ============================================================ -->
+    <record id="view_shipping_label_form" model="ir.ui.view">
+        <field name="name">shipping.label.form</field>
+        <field name="model">shipping.label</field>
+        <field name="arch" type="xml">
+            <form string="Etiqueta de envío">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Etiqueta">
+                            <field name="label_type"/>
+                            <field name="file_name"/>
+                            <field name="file_size"/>
+                            <field name="attachment_id"/>
+                            <field name="create_date" string="Fecha de emisión"/>
+                        </group>
+                        <group string="Envío">
+                            <field name="shipment_id"/>
+                            <field name="tracking_ref"/>
+                            <field name="partner_id"/>
+                            <field name="carrier_id"/>
+                            <field name="carrier_type"/>
+                            <field name="origin"/>
+                            <field name="ship_date"/>
+                            <field name="shipment_state"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- LABEL SEARCH VIEW                                             -->
+    <!-- ============================================================ -->
+    <record id="view_shipping_label_search" model="ir.ui.view">
+        <field name="name">shipping.label.search</field>
+        <field name="model">shipping.label</field>
+        <field name="arch" type="xml">
+            <search string="Buscar etiquetas">
+                <field name="tracking_ref"/>
+                <field name="partner_id"/>
+                <field name="carrier_id"/>
+                <field name="origin"/>
+                <field name="shipment_id"/>
+                <separator/>
+                <filter name="filter_shipping" string="Envío"
+                        domain="[('label_type', '=', 'shipping')]"/>
+                <filter name="filter_return" string="Devolución"
+                        domain="[('label_type', '=', 'return')]"/>
+                <filter name="filter_reprint" string="Reimpresión"
+                        domain="[('label_type', '=', 'reprint')]"/>
+                <separator/>
+                <filter name="filter_today" string="Hoy"
+                        domain="[('create_date', '&gt;=', (context_today()).strftime('%%Y-%%m-%%d'))]"/>
+                <filter name="filter_week" string="Esta semana"
+                        domain="[('create_date', '&gt;=', (context_today() - datetime.timedelta(days=7)).strftime('%%Y-%%m-%%d'))]"/>
+                <filter name="filter_month" string="Este mes"
+                        domain="[('create_date', '&gt;=', (context_today()).strftime('%%Y-%%m-01'))]"/>
+                <separator/>
+                <group expand="0" string="Agrupar por">
+                    <filter name="group_carrier" string="Transportista"
+                            context="{'group_by': 'carrier_id'}"/>
+                    <filter name="group_type" string="Tipo de etiqueta"
+                            context="{'group_by': 'label_type'}"/>
+                    <filter name="group_state" string="Estado del envío"
+                            context="{'group_by': 'shipment_state'}"/>
+                    <filter name="group_date" string="Fecha de emisión"
+                            context="{'group_by': 'create_date:month'}"/>
+                    <filter name="group_partner" string="Destinatario"
+                            context="{'group_by': 'partner_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- LABEL ACTIONS                                                 -->
+    <!-- ============================================================ -->
+    <record id="action_shipping_label" model="ir.actions.act_window">
+        <field name="name">Etiquetas emitidas</field>
+        <field name="res_model">shipping.label</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_shipping_label_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No hay etiquetas emitidas
+            </p>
+            <p>
+                Las etiquetas se generan automáticamente al enviar
+                un paquete a través de un transportista.
+            </p>
+        </field>
+    </record>
+
+</odoo>
