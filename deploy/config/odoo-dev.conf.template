@@ -1,0 +1,35 @@
+[options]
+; =============================================
+; Odoo 19 Enterprise - DEVELOPMENT Configuration
+; Skymedic - On-Premise
+; =============================================
+
+; --- Database ---
+db_host = localhost
+db_port = 5432
+db_user = odoo
+db_password = DB_PASSWORD_HERE
+db_name = skymedic2
+list_db = True
+
+; --- Paths ---
+addons_path = /opt/odoo/src/odoo/odoo/enterprise,/opt/odoo/src/odoo/addons,/opt/odoo/src/odoo/odoo/addons,/opt/odoo/src/custom-addons
+data_dir = /opt/odoo/filestore/dev
+
+; --- Performance (dev: single-process, no limits) ---
+workers = 0
+max_cron_threads = 1
+limit_time_cpu = 600
+limit_time_real = 1200
+
+; --- Development ---
+dev_mode = reload,qweb,xml
+log_level = debug
+log_handler = :DEBUG,werkzeug:WARNING
+
+; --- Network ---
+http_port = 8073
+proxy_mode = True
+
+; --- Security ---
+admin_passwd = MASTER_PASSWORD_HERE

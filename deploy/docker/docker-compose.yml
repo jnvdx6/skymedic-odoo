@@ -1,0 +1,20 @@
+services:
+  odoo-prod:
+    image: ${ODOO_IMAGE:-odoo-skymedic:latest}
+    container_name: odoo-prod
+    restart: unless-stopped
+    profiles: ["prod", "all"]
+    network_mode: host
+    volumes:
+      - /opt/odoo/docker/config-prod/odoo.conf:/etc/odoo/odoo.conf:ro
+      - /opt/odoo/filestore/prod:/var/lib/odoo/filestore
+
+  odoo-staging:
+    image: ${ODOO_IMAGE:-odoo-skymedic:latest}
+    container_name: odoo-staging
+    restart: unless-stopped
+    profiles: ["staging", "all"]
+    network_mode: host
+    volumes:
+      - /opt/odoo/docker/config-staging/odoo.conf:/etc/odoo/odoo.conf:ro
+      - /opt/odoo/filestore/staging:/var/lib/odoo/filestore

@@ -1,0 +1,41 @@
+# Odoo STAGING - PRIVATE (port 9443)
+# Accessible via Tailscale mesh and from localhost
+upstream odoo-staging {
+    server 127.0.0.1:8071;
+}
+upstream odoo-staging-ws {
+    server 127.0.0.1:8074;
+}
+
+server {
+    listen 9443 ssl http2;
+    server_name _;
+
+    ssl_certificate     /etc/nginx/ssl/server.crt;
+    ssl_certificate_key /etc/nginx/ssl/server.key;
+
+    # Allow Tailscale IPs + localhost (for Tailscale Funnel/serve proxy)
+    allow 127.0.0.1;
+    allow 100.64.0.0/10;
+    deny all;
+
+    client_max_body_size 200M;
+
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto https;
+    proxy_read_timeout 720s;
+
+    location /websocket {
+        proxy_pass http://odoo-staging-ws;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $connection_upgrade;
+    }
+
+    location / {
+        proxy_pass http://odoo-staging;
+        proxy_redirect off;
+    }
+}

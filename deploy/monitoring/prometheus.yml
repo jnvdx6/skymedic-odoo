@@ -1,0 +1,57 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  - "alert-rules.yml"
+
+scrape_configs:
+  - job_name: 'node'
+    static_configs:
+      - targets: ['127.0.0.1:9100']
+        labels:
+          instance: 'odoo-server'
+
+  - job_name: 'cadvisor'
+    static_configs:
+      - targets: ['127.0.0.1:8080']
+    metric_relabel_configs:
+      - source_labels: [container_label_com_docker_compose_project]
+        regex: '.+'
+        action: keep
+
+  - job_name: 'postgres'
+    static_configs:
+      - targets: ['127.0.0.1:9187']
+
+  - job_name: 'nginx'
+    static_configs:
+      - targets: ['127.0.0.1:9113']
+
+  - job_name: 'odoo-prod'
+    metrics_path: /web/health
+    scrape_interval: 30s
+    static_configs:
+      - targets: ['127.0.0.1:8069']
+        labels:
+          environment: 'production'
+
+  - job_name: 'odoo-staging'
+    metrics_path: /web/health
+    scrape_interval: 30s
+    static_configs:
+      - targets: ['127.0.0.1:8071']
+        labels:
+          environment: 'staging'
+
+  - job_name: 'odoo-dev'
+    metrics_path: /web/health
+    scrape_interval: 30s
+    static_configs:
+      - targets: ['127.0.0.1:8069']
+        labels:
+          environment: 'dev'
+
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['127.0.0.1:9090']

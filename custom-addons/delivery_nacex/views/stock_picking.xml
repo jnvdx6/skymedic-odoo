@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_stock_picking_form_nacex" model="ir.ui.view">
+        <field name="name">stock.picking.form.nacex</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form" />
+        <field name="arch" type="xml">
+            <!-- NACEX fields in carrier data section -->
+            <field name="carrier_id" position="after">
+                <field
+                    name="nacex_with_return"
+                    invisible="carrier_id.delivery_type != 'nacex'"
+                />
+                <field
+                    name="nacex_expedition_code"
+                    invisible="carrier_id.delivery_type != 'nacex' or not nacex_expedition_code"
+                />
+                <field
+                    name="nacex_tracking_status"
+                    invisible="carrier_id.delivery_type != 'nacex' or not nacex_tracking_status"
+                />
+                <field
+                    name="nacex_tracking_status_date"
+                    invisible="carrier_id.delivery_type != 'nacex' or not nacex_tracking_status_date"
+                />
+            </field>
+
+            <!-- NACEX action buttons in header -->
+            <xpath expr="//header" position="inside">
+                <button
+                    name="action_nacex_check_status"
+                    string="Consultar estado NACEX"
+                    type="object"
+                    class="btn btn-secondary"
+                    invisible="carrier_id.delivery_type != 'nacex' or not carrier_tracking_ref or state != 'done'"
+                    icon="fa-search"
+                />
+                <button
+                    name="action_nacex_schedule_pickup"
+                    string="Programar recogida"
+                    type="object"
+                    class="btn btn-secondary"
+                    invisible="carrier_id.delivery_type != 'nacex' or not carrier_tracking_ref or state != 'done'"
+                    icon="fa-calendar"
+                />
+            </xpath>
+        </field>
+    </record>
+</odoo>

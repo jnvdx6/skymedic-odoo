@@ -1,0 +1,106 @@
+groups:
+  - name: servidor
+    rules:
+      - alert: HighCPU
+        expr: 100 - (avg(irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 85
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "CPU alta: {{ $value | printf \"%.1f\" }}%"
+
+      - alert: HighMemory
+        expr: (1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100 > 90
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "RAM al {{ $value | printf \"%.1f\" }}%"
+
+      - alert: DiskSpaceLow
+        expr: (1 - node_filesystem_avail_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"}) * 100 > 85
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Disco al {{ $value | printf \"%.1f\" }}%"
+
+      - alert: DiskSpaceCritical
+        expr: (1 - node_filesystem_avail_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"}) * 100 > 95
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "DISCO CRITICO: {{ $value | printf \"%.1f\" }}%"
+
+  - name: servicios
+    rules:
+      - alert: OdooProdDown
+        expr: up{job="odoo-prod"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Odoo PRODUCCION caido"
+
+      - alert: OdooStagingDown
+        expr: up{job="odoo-staging"} == 0
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Odoo Staging caido"
+
+      - alert: PostgreSQLDown
+        expr: up{job="postgres"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "PostgreSQL caido"
+
+      - alert: NginxDown
+        expr: up{job="nginx"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Nginx caido"
+
+  - name: postgresql
+    rules:
+      - alert: PostgreSQLHighConnections
+        expr: pg_stat_activity_count > 150
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "PG conexiones: {{ $value }}/200"
+
+  - name: docker
+    rules:
+      - alert: ContainerHighCPU
+        expr: rate(container_cpu_usage_seconds_total{name=~"odoo.*"}[5m]) * 100 > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "{{ $labels.name }} CPU alta"
+
+      - alert: ContainerRestarting
+        expr: increase(container_start_time_seconds{name=~"odoo.*"}[10m]) > 1
+        for: 0m
+        labels:
+          severity: warning
+        annotations:
+          summary: "{{ $labels.name }} se ha reiniciado"
+
+  - name: seguridad
+    rules:
+      - alert: HighLoginFailRate
+        expr: rate(nginx_http_requests_total{status="429"}[5m]) > 0.5
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Rate limiting activado - posible fuerza bruta"

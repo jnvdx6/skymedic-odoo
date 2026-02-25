@@ -1,0 +1,410 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* delivery_nacex
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-02-24 19:00+0000\n"
+"PO-Revision-Date: 2026-02-24 19:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: delivery_nacex
+#: model:ir.model.fields.selection,name:delivery_nacex.selection__delivery_carrier__delivery_type__nacex
+msgid "NACEX"
+msgstr "NACEX"
+
+#. module: delivery_nacex
+#: model:ir.model.fields,field_description:delivery_nacex.field_delivery_carrier__nacex_agency_code
+msgid "Código de agencia"
+msgstr "Código de agencia"
+
+#. module: delivery_nacex
+#: model:ir.model.fields,field_description:delivery_nacex.field_delivery_carrier__nacex_customer_code
+msgid "Código de cliente"
+msgstr "Código de cliente"
+
+#. module: delivery_nacex
+#: model:ir.model.fields,field_description:delivery_nacex.field_delivery_carrier__nacex_service_code
+msgid "Tipo de servicio"
+msgstr "Tipo de servicio"
+
+#. module: delivery_nacex
+#: model:ir.model.fields,help:delivery_nacex.field_delivery_carrier__nacex_service_code
+msgid "Seleccione el tipo de servicio NACEX"
+msgstr "Seleccione el tipo de servicio NACEX"
+
+#. module: delivery_nacex
+#: model:ir.model.fields,field_description:delivery_nacex.field_delivery_carrier__nacex_carriage_code
+msgid "Tipo de porte"
+msgstr "Tipo de porte"
+
+#. module: delivery_nacex
+#: model:ir.model.fields,help:delivery_nacex.field_delivery_carrier__nacex_carriage_code
+msgid "Seleccione quién paga el porte del envío"
+msgstr "Seleccione quién paga el porte del envío"
+
+#. module: delivery_nacex
+#: model:ir.model.fields,field_description:delivery_nacex.field_delivery_carrier__nacex_packaging_code
+msgid "Tipo de embalaje"
+msgstr "Tipo de embalaje"
+
+#. module: delivery_nacex
+#: model:ir.model.fields,help:delivery_nacex.field_delivery_carrier__nacex_packaging_code
+msgid "Seleccione el tipo de embalaje del envío"
+msgstr "Seleccione el tipo de embalaje del envío"
+
+#. module: delivery_nacex
+#: model:ir.model.fields,field_description:delivery_nacex.field_delivery_carrier__nacex_with_return
+#: model:ir.model.fields,field_description:delivery_nacex.field_stock_picking__nacex_with_return
+msgid "Con devolución"
+msgstr "Con devolución"
+
+#. module: delivery_nacex
+#: model:ir.model.fields,help:delivery_nacex.field_delivery_carrier__nacex_with_return
+#: model:ir.model.fields,help:delivery_nacex.field_stock_picking__nacex_with_return
+msgid "Activar envío con devolución para entregas NACEX"
+msgstr "Activar envío con devolución para entregas NACEX"
+
+#. module: delivery_nacex
+#: model:ir.model.fields,field_description:delivery_nacex.field_stock_picking__nacex_expedition_code
+msgid "Código de expedición NACEX"
+msgstr "Código de expedición NACEX"
+
+#. module: delivery_nacex
+#: model:ir.model.fields,help:delivery_nacex.field_stock_picking__nacex_expedition_code
+msgid "Código interno de expedición NACEX (codExp), utilizado para cancelación y obtención de etiquetas"
+msgstr "Código interno de expedición NACEX (codExp), utilizado para cancelación y obtención de etiquetas"
+
+#. module: delivery_nacex
+#: model:ir.model.fields,field_description:delivery_nacex.field_stock_picking__nacex_tracking_status
+msgid "Estado de seguimiento NACEX"
+msgstr "Estado de seguimiento NACEX"
+
+#. module: delivery_nacex
+#: model:ir.model.fields,field_description:delivery_nacex.field_stock_picking__nacex_tracking_status_date
+msgid "Última comprobación de estado"
+msgstr "Última comprobación de estado"
+
+#. module: delivery_nacex
+#: model:ir.model.fields.selection,name:delivery_nacex.selection__delivery_carrier__nacex_carriage_code__O
+msgid "Origen (pagado por el remitente)"
+msgstr "Origen (pagado por el remitente)"
+
+#. module: delivery_nacex
+#: model:ir.model.fields.selection,name:delivery_nacex.selection__delivery_carrier__nacex_carriage_code__D
+msgid "Destino (pagado por el destinatario)"
+msgstr "Destino (pagado por el destinatario)"
+
+#. module: delivery_nacex
+#: model:ir.model.fields.selection,name:delivery_nacex.selection__delivery_carrier__nacex_carriage_code__T
+msgid "Tercera (pagado por un tercero)"
+msgstr "Tercera (pagado por un tercero)"
+
+#. module: delivery_nacex
+#: model:ir.model.fields.selection,name:delivery_nacex.selection__delivery_carrier__nacex_packaging_code__0
+msgid "Documentos"
+msgstr "Documentos"
+
+#. module: delivery_nacex
+#: model:ir.model.fields.selection,name:delivery_nacex.selection__delivery_carrier__nacex_packaging_code__1
+msgid "Bolsa"
+msgstr "Bolsa"
+
+#. module: delivery_nacex
+#: model:ir.model.fields.selection,name:delivery_nacex.selection__delivery_carrier__nacex_packaging_code__2
+msgid "Paquete"
+msgstr "Paquete"
+
+#. module: delivery_nacex
+#: model:ir.model.fields.selection,name:delivery_nacex.selection__delivery_carrier__nacex_service_code__01
+msgid "NACEX 10:00H - Entrega express antes de las 10h"
+msgstr "NACEX 10:00H - Entrega express antes de las 10h"
+
+#. module: delivery_nacex
+#: model:ir.model.fields.selection,name:delivery_nacex.selection__delivery_carrier__nacex_service_code__02
+msgid "NACEX 12:00H - Entrega express antes de las 12h"
+msgstr "NACEX 12:00H - Entrega express antes de las 12h"
+
+#. module: delivery_nacex
+#: model:ir.model.fields.selection,name:delivery_nacex.selection__delivery_carrier__nacex_service_code__03
+msgid "INTERDIA - Entrega estándar día siguiente"
+msgstr "INTERDIA - Entrega estándar día siguiente"
+
+#. module: delivery_nacex
+#: model:ir.model.fields.selection,name:delivery_nacex.selection__delivery_carrier__nacex_service_code__04
+msgid "PLUS BAG 1 - Bolsa plus tipo 1"
+msgstr "PLUS BAG 1 - Bolsa plus tipo 1"
+
+#. module: delivery_nacex
+#: model:ir.model.fields.selection,name:delivery_nacex.selection__delivery_carrier__nacex_service_code__05
+msgid "PLUS BAG 2 - Bolsa plus tipo 2"
+msgstr "PLUS BAG 2 - Bolsa plus tipo 2"
+
+#. module: delivery_nacex
+#: model:ir.model.fields.selection,name:delivery_nacex.selection__delivery_carrier__nacex_service_code__06
+msgid "MALETA - Transporte de equipaje"
+msgstr "MALETA - Transporte de equipaje"
+
+#. module: delivery_nacex
+#: model:ir.model.fields.selection,name:delivery_nacex.selection__delivery_carrier__nacex_service_code__07
+msgid "VALIJA IDA Y VUELTA - Servicio de valija ida y vuelta"
+msgstr "VALIJA IDA Y VUELTA - Servicio de valija ida y vuelta"
+
+#. module: delivery_nacex
+#: model:ir.model.fields.selection,name:delivery_nacex.selection__delivery_carrier__nacex_service_code__08
+msgid "NACEX 19:00H - Entrega en el día antes de las 19h"
+msgstr "NACEX 19:00H - Entrega en el día antes de las 19h"
+
+#. module: delivery_nacex
+#: model:ir.model.fields.selection,name:delivery_nacex.selection__delivery_carrier__nacex_service_code__09
+msgid "PUENTE URBANO - Servicio puente urbano"
+msgstr "PUENTE URBANO - Servicio puente urbano"
+
+#. module: delivery_nacex
+#: model:ir.model.fields.selection,name:delivery_nacex.selection__delivery_carrier__nacex_service_code__10
+msgid "DEVOLUCIÓN ALBARÁN CLIENTE - Devolución con albarán"
+msgstr "DEVOLUCIÓN ALBARÁN CLIENTE - Devolución con albarán"
+
+#. module: delivery_nacex
+#: model:ir.model.fields.selection,name:delivery_nacex.selection__delivery_carrier__nacex_service_code__11
+msgid "NACEX 08:30H - Entrega ultra-express antes de las 8:30h"
+msgstr "NACEX 08:30H - Entrega ultra-express antes de las 8:30h"
+
+#. module: delivery_nacex
+#: model:ir.model.fields.selection,name:delivery_nacex.selection__delivery_carrier__nacex_service_code__12
+msgid "DEVOLUCIÓN TALÓN - Servicio de devolución talón"
+msgstr "DEVOLUCIÓN TALÓN - Servicio de devolución talón"
+
+#. module: delivery_nacex
+#: model:ir.model.fields.selection,name:delivery_nacex.selection__delivery_carrier__nacex_service_code__14
+msgid "DEVOLUCIÓN PLUS BAG 1 - Devolución bolsa plus tipo 1"
+msgstr "DEVOLUCIÓN PLUS BAG 1 - Devolución bolsa plus tipo 1"
+
+#. module: delivery_nacex
+#: model:ir.model.fields.selection,name:delivery_nacex.selection__delivery_carrier__nacex_service_code__15
+msgid "DEVOLUCIÓN PLUS BAG 2 - Devolución bolsa plus tipo 2"
+msgstr "DEVOLUCIÓN PLUS BAG 2 - Devolución bolsa plus tipo 2"
+
+#. module: delivery_nacex
+#: model:ir.model.fields.selection,name:delivery_nacex.selection__delivery_carrier__nacex_service_code__17
+msgid "DEVOLUCIÓN E-NACEX - Devolución servicio electrónico"
+msgstr "DEVOLUCIÓN E-NACEX - Devolución servicio electrónico"
+
+#. module: delivery_nacex
+#: model:ir.model.fields.selection,name:delivery_nacex.selection__delivery_carrier__nacex_service_code__21
+msgid "NACEX SÁBADO - Entrega en sábado"
+msgstr "NACEX SÁBADO - Entrega en sábado"
+
+#. module: delivery_nacex
+#: model:ir.model.fields.selection,name:delivery_nacex.selection__delivery_carrier__nacex_service_code__22
+msgid "CANARIAS - Envío estándar a Canarias"
+msgstr "CANARIAS - Envío estándar a Canarias"
+
+#. module: delivery_nacex
+#: model:ir.model.fields.selection,name:delivery_nacex.selection__delivery_carrier__nacex_service_code__24
+msgid "CANARIAS 24H - Envío express 24h a Canarias"
+msgstr "CANARIAS 24H - Envío express 24h a Canarias"
+
+#. module: delivery_nacex
+#: model:ir.model.fields.selection,name:delivery_nacex.selection__delivery_carrier__nacex_service_code__26
+msgid "PLUS PACK - Servicio plus pack"
+msgstr "PLUS PACK - Servicio plus pack"
+
+#. module: delivery_nacex
+#: model:ir.model.fields.selection,name:delivery_nacex.selection__delivery_carrier__nacex_service_code__27
+msgid "E-NACEX - Entrega económica e-commerce"
+msgstr "E-NACEX - Entrega económica e-commerce"
+
+#. module: delivery_nacex
+#: model:ir.model.fields.selection,name:delivery_nacex.selection__delivery_carrier__nacex_service_code__28
+msgid "PREMIUM - Entrega express premium"
+msgstr "PREMIUM - Entrega express premium"
+
+#. module: delivery_nacex
+#: model:ir.model.fields.selection,name:delivery_nacex.selection__delivery_carrier__nacex_service_code__29
+msgid "NX-SHOP VERDE - Punto de recogida (verde)"
+msgstr "NX-SHOP VERDE - Punto de recogida (verde)"
+
+#. module: delivery_nacex
+#: model:ir.model.fields.selection,name:delivery_nacex.selection__delivery_carrier__nacex_service_code__30
+msgid "NX-SHOP NARANJA - Punto de recogida (naranja)"
+msgstr "NX-SHOP NARANJA - Punto de recogida (naranja)"
+
+#. module: delivery_nacex
+#: model:ir.model.fields.selection,name:delivery_nacex.selection__delivery_carrier__nacex_service_code__31
+msgid "E-NACEX SHOP - E-commerce en punto de recogida"
+msgstr "E-NACEX SHOP - E-commerce en punto de recogida"
+
+#. module: delivery_nacex
+#: model:ir.model.fields.selection,name:delivery_nacex.selection__delivery_carrier__nacex_service_code__33
+msgid "C@MBIO - Servicio de intercambio"
+msgstr "C@MBIO - Servicio de intercambio"
+
+#. module: delivery_nacex
+#: model:ir.model.fields.selection,name:delivery_nacex.selection__delivery_carrier__nacex_service_code__48
+msgid "CANARIAS 48H - Envío a Canarias en 48h"
+msgstr "CANARIAS 48H - Envío a Canarias en 48h"
+
+#. module: delivery_nacex
+#: model:ir.model.fields.selection,name:delivery_nacex.selection__delivery_carrier__nacex_service_code__88
+msgid "AHORA MISMO - Entrega inmediata"
+msgstr "AHORA MISMO - Entrega inmediata"
+
+#. module: delivery_nacex
+#: model:ir.model.fields.selection,name:delivery_nacex.selection__delivery_carrier__nacex_service_code__90
+msgid "NACEX.SHOP - Entrega en punto NACEX.SHOP"
+msgstr "NACEX.SHOP - Entrega en punto NACEX.SHOP"
+
+#. module: delivery_nacex
+#: model:ir.model.fields.selection,name:delivery_nacex.selection__delivery_carrier__nacex_service_code__91
+msgid "SWAP - Servicio de intercambio directo"
+msgstr "SWAP - Servicio de intercambio directo"
+
+#. module: delivery_nacex
+#: model:ir.model.fields.selection,name:delivery_nacex.selection__delivery_carrier__nacex_service_code__95
+msgid "DEVOLUCIÓN SWAP - Devolución de intercambio"
+msgstr "DEVOLUCIÓN SWAP - Devolución de intercambio"
+
+#. module: delivery_nacex
+#: model:ir.model.fields.selection,name:delivery_nacex.selection__delivery_carrier__nacex_service_code__96
+msgid "DEV. ORIGEN - Devolución a origen"
+msgstr "DEV. ORIGEN - Devolución a origen"
+
+#. module: delivery_nacex
+#: code:addons/delivery_nacex/models/delivery_carrier.py
+#, python-format
+msgid "NACEX no proporciona estimación de tarifas."
+msgstr "NACEX no proporciona estimación de tarifas."
+
+#. module: delivery_nacex
+#: code:addons/delivery_nacex/models/delivery_carrier.py
+#, python-format
+msgid "Por favor configure una cuenta de transportista NACEX."
+msgstr "Por favor configure una cuenta de transportista NACEX."
+
+#. module: delivery_nacex
+#: code:addons/delivery_nacex/models/delivery_carrier.py
+#, python-format
+msgid "Error de conexión NACEX: %(error)s"
+msgstr "Error de conexión NACEX: %(error)s"
+
+#. module: delivery_nacex
+#: code:addons/delivery_nacex/models/delivery_carrier.py
+#, python-format
+msgid "Error de la API NACEX (HTTP %(code)s): %(text)s"
+msgstr "Error de la API NACEX (HTTP %(code)s): %(text)s"
+
+#. module: delivery_nacex
+#: code:addons/delivery_nacex/models/delivery_carrier.py
+#, python-format
+msgid "Error NACEX %(method)s: %(text)s"
+msgstr "Error NACEX %(method)s: %(text)s"
+
+#. module: delivery_nacex
+#: code:addons/delivery_nacex/models/delivery_carrier.py
+#, python-format
+msgid "Por favor defina una dirección de remitente correcta."
+msgstr "Por favor defina una dirección de remitente correcta."
+
+#. module: delivery_nacex
+#: code:addons/delivery_nacex/models/delivery_carrier.py
+#, python-format
+msgid "Por favor defina una dirección de destinatario correcta."
+msgstr "Por favor defina una dirección de destinatario correcta."
+
+#. module: delivery_nacex
+#: code:addons/delivery_nacex/models/delivery_carrier.py
+#, python-format
+msgid "<b>Número de seguimiento:</b> %(number)s"
+msgstr "<b>Número de seguimiento:</b> %(number)s"
+
+#. module: delivery_nacex
+#: code:addons/delivery_nacex/models/delivery_carrier.py
+#, python-format
+msgid "No se puede cancelar: no se encontró código de expedición NACEX para %(name)s."
+msgstr "No se puede cancelar: no se encontró código de expedición NACEX para %(name)s."
+
+#. module: delivery_nacex
+#: code:addons/delivery_nacex/models/delivery_carrier.py
+#, python-format
+msgid "<b>Actualización de seguimiento NACEX:</b><br/>%(status)s"
+msgstr "<b>Actualización de seguimiento NACEX:</b><br/>%(status)s"
+
+#. module: delivery_nacex
+#: code:addons/delivery_nacex/models/delivery_carrier.py
+#, python-format
+msgid "Por favor configure primero una cuenta de transportista NACEX."
+msgstr "Por favor configure primero una cuenta de transportista NACEX."
+
+#. module: delivery_nacex
+#: code:addons/delivery_nacex/models/delivery_carrier.py
+#, python-format
+msgid "Conexión exitosa"
+msgstr "Conexión exitosa"
+
+#. module: delivery_nacex
+#: code:addons/delivery_nacex/models/delivery_carrier.py
+#, python-format
+msgid "Conexión exitosa con la API de NACEX."
+msgstr "Conexión exitosa con la API de NACEX."
+
+#. module: delivery_nacex
+#: code:addons/delivery_nacex/models/stock_picking.py
+#, python-format
+msgid "No hay referencia de seguimiento disponible para consultar el estado."
+msgstr "No hay referencia de seguimiento disponible para consultar el estado."
+
+#. module: delivery_nacex
+#: code:addons/delivery_nacex/models/stock_picking.py
+#, python-format
+msgid "Programar recogida NACEX"
+msgstr "Programar recogida NACEX"
+
+#. module: delivery_nacex
+#: code:addons/delivery_nacex/wizard/nacex_pickup_wizard.py
+#, python-format
+msgid "<b>Recogida NACEX programada:</b><br/>%(result)s"
+msgstr "<b>Recogida NACEX programada:</b><br/>%(result)s"
+
+#. module: delivery_nacex
+#: model:ir.model,name:delivery_nacex.model_nacex_pickup_wizard
+msgid "Asistente de programación de recogida NACEX"
+msgstr "Asistente de programación de recogida NACEX"
+
+#. module: delivery_nacex
+#: model:ir.model.fields,field_description:delivery_nacex.field_nacex_pickup_wizard__picking_id
+msgid "Orden de entrega"
+msgstr "Orden de entrega"
+
+#. module: delivery_nacex
+#: model:ir.model.fields,field_description:delivery_nacex.field_nacex_pickup_wizard__reco_codigo
+msgid "Código de recogida"
+msgstr "Código de recogida"
+
+#. module: delivery_nacex
+#: model:ir.model.fields,field_description:delivery_nacex.field_nacex_pickup_wizard__del_sol
+msgid "Código de agencia"
+msgstr "Código de agencia"
+
+#. module: delivery_nacex
+#: model:ir.model.fields,field_description:delivery_nacex.field_nacex_pickup_wizard__num_rec
+msgid "Número de recogida"
+msgstr "Número de recogida"
+
+#. module: delivery_nacex
+#: model:ir.model.fields,field_description:delivery_nacex.field_nacex_pickup_wizard__ref
+msgid "Referencia"
+msgstr "Referencia"
+
+#. module: delivery_nacex
+#: model:ir.model.fields,field_description:delivery_nacex.field_nacex_pickup_wizard__pickup_date
+msgid "Fecha de recogida"
+msgstr "Fecha de recogida"

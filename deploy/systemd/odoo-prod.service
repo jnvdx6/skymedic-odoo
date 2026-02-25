@@ -1,0 +1,17 @@
+[Unit]
+Description=Odoo 19 Enterprise - Production (Skymedic)
+After=postgresql.service
+Requires=postgresql.service
+
+[Service]
+Type=simple
+User=omegaserver02
+Group=omegaserver02
+WorkingDirectory=/opt/odoo/src/odoo
+ExecStart=/opt/odoo/dev/venv/bin/python /opt/odoo/src/odoo/odoo-bin --config=/opt/odoo/docker/config-prod/odoo.conf
+Restart=on-failure
+RestartSec=5
+Environment=PYTHONPATH=/opt/odoo/src/odoo
+
+[Install]
+WantedBy=multi-user.target
