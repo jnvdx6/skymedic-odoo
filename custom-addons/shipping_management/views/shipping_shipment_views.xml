@@ -223,23 +223,23 @@
                         domain="[('state', 'in', ('confirmed', 'in_transit'))]"/>
                 <separator/>
                 <filter name="filter_today" string="Hoy"
-                        domain="[('ship_date', '&gt;=', (context_today()).strftime('%%Y-%%m-%%d'))]"/>
+                        domain="[('ship_date', '&gt;=', context_today().strftime('%%Y-%%m-%%d'))]"/>
                 <filter name="filter_week" string="Esta semana"
                         domain="[('ship_date', '&gt;=', (context_today() - datetime.timedelta(days=7)).strftime('%%Y-%%m-%%d'))]"/>
                 <filter name="filter_month" string="Este mes"
-                        domain="[('ship_date', '&gt;=', (context_today()).strftime('%%Y-%%m-01'))]"/>
+                        domain="[('ship_date', '&gt;=', context_today().strftime('%%Y-%%m-01'))]"/>
                 <separator/>
-                <group expand="0" string="Agrupar por">
+                <group name="groupby">
                     <filter name="group_carrier" string="Transportista"
-                            context="{'group_by': 'carrier_id'}"/>
+                            domain="[]" context="{'group_by': 'carrier_id'}"/>
                     <filter name="group_carrier_type" string="Tipo de transportista"
-                            context="{'group_by': 'carrier_type'}"/>
+                            domain="[]" context="{'group_by': 'carrier_type'}"/>
                     <filter name="group_state" string="Estado"
-                            context="{'group_by': 'state'}"/>
+                            domain="[]" context="{'group_by': 'state'}"/>
                     <filter name="group_ship_date" string="Fecha de envío"
-                            context="{'group_by': 'ship_date:month'}"/>
+                            domain="[]" context="{'group_by': 'ship_date:month'}"/>
                     <filter name="group_partner" string="Destinatario"
-                            context="{'group_by': 'partner_id'}"/>
+                            domain="[]" context="{'group_by': 'partner_id'}"/>
                 </group>
             </search>
         </field>

@@ -97,17 +97,17 @@
                 <filter name="filter_month" string="Este mes"
                         domain="[('create_date', '&gt;=', (context_today()).strftime('%%Y-%%m-01'))]"/>
                 <separator/>
-                <group expand="0" string="Agrupar por">
+                <group name="groupby">
                     <filter name="group_carrier" string="Transportista"
-                            context="{'group_by': 'carrier_id'}"/>
+                            domain="[]" context="{'group_by': 'carrier_id'}"/>
                     <filter name="group_type" string="Tipo de etiqueta"
-                            context="{'group_by': 'label_type'}"/>
+                            domain="[]" context="{'group_by': 'label_type'}"/>
                     <filter name="group_state" string="Estado del envío"
-                            context="{'group_by': 'shipment_state'}"/>
+                            domain="[]" context="{'group_by': 'shipment_state'}"/>
                     <filter name="group_date" string="Fecha de emisión"
-                            context="{'group_by': 'create_date:month'}"/>
+                            domain="[]" context="{'group_by': 'create_date:month'}"/>
                     <filter name="group_partner" string="Destinatario"
-                            context="{'group_by': 'partner_id'}"/>
+                            domain="[]" context="{'group_by': 'partner_id'}"/>
                 </group>
             </search>
         </field>
