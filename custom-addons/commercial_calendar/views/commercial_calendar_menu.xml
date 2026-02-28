@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <odoo>
 
-    <!-- Commercial Calendar Action with commercial filter pre-applied -->
+    <!-- Commercial Calendar Action (used from partner stat button, not top menu) -->
     <record id="action_commercial_calendar" model="ir.actions.act_window">
         <field name="name">Calendario Comercial</field>
         <field name="res_model">calendar.event</field>
@@ -18,31 +18,13 @@
         </field>
     </record>
 
-    <!-- Menu: Mis Clientes (before Calendario) -->
+    <!-- Menu: Mis Clientes -->
     <menuitem
         id="menu_commercial_portfolio"
         name="Mis Clientes"
         parent="sale.sale_menu_root"
         action="action_commercial_portfolio"
         sequence="4"
-        groups="sales_team.group_sale_salesman"/>
-
-    <!-- Menu: Calendario Comercial -->
-    <menuitem
-        id="menu_commercial_calendar"
-        name="Calendario Comercial"
-        parent="sale.sale_menu_root"
-        action="action_commercial_calendar"
-        sequence="5"
-        groups="sales_team.group_sale_salesman"/>
-
-    <!-- Menu: Registro Rápido -->
-    <menuitem
-        id="menu_commercial_quick_log"
-        name="Registro Rápido"
-        parent="sale.sale_menu_root"
-        action="action_commercial_quick_log"
-        sequence="6"
         groups="sales_team.group_sale_salesman"/>
 
     <!-- Menu: Planificador de Visitas -->

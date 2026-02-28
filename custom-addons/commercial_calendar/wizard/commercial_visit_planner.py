@@ -41,14 +41,27 @@ class CommercialVisitPlanner(models.TransientModel):
         'wizard_id',
         string='Clientes Sugeridos',
     )
+    search_done = fields.Boolean(
+        string='Búsqueda realizada',
+        default=False,
+    )
+    result_count = fields.Integer(
+        string='Resultados',
+        default=0,
+    )
 
     def action_search(self):
         """Search and prioritize clients for visits."""
         self.ensure_one()
+
+        # Build domain — if commercial_user_id set, filter by it; otherwise show all companies
         domain = [
-            ('commercial_user_id', '=', self.commercial_user_id.id),
             ('is_company', '=', True),
+            ('customer_rank', '>', 0),
         ]
+        if self.commercial_user_id:
+            domain.append(('commercial_user_id', '=', self.commercial_user_id.id))
+
         if self.min_score > 0:
             domain.append(('commercial_score', '>=', self.min_score))
         if self.only_overdue:
@@ -59,6 +72,9 @@ class CommercialVisitPlanner(models.TransientModel):
             domain.append(('commercial_alert_opportunity', '=', True))
 
         partners = self.env['res.partner'].search(domain, limit=200)
+
+        # Recompute commercial data on the fly so results are fresh
+        partners._recompute_commercial_data()
 
         # Compute priority scores
         scored = []
@@ -80,16 +96,17 @@ class CommercialVisitPlanner(models.TransientModel):
                 'reason': reason,
                 'commercial_score': partner.commercial_score,
                 'days_since_visit': partner.days_since_last_visit,
-                'selected': priority >= 50,  # Auto-select high priority
+                'selected': priority >= 50,
             }))
-        self.write({'line_ids': lines})
-        return {
-            'type': 'ir.actions.act_window',
-            'res_model': 'commercial.visit.planner',
-            'res_id': self.id,
-            'views': [(False, 'form')],
-            'target': 'new',
-        }
+
+        self.write({
+            'line_ids': lines,
+            'search_done': True,
+            'result_count': len(lines),
+        })
+
+        # Return same wizard — no new popup
+        return False
 
     def _compute_priority(self, partner):
         """Compute visit priority score (0-100)."""
@@ -97,7 +114,10 @@ class CommercialVisitPlanner(models.TransientModel):
         days = partner.days_since_last_visit
 
         # Time since last visit (max 30pts)
-        if days > 180:
+        if days >= 9999:
+            # Never visited
+            priority += 30
+        elif days > 180:
             priority += 30
         elif days > 90:
             priority += 25
@@ -140,7 +160,9 @@ class CommercialVisitPlanner(models.TransientModel):
         """Generate a human-readable reason for visit priority."""
         reasons = []
         days = partner.days_since_last_visit
-        if days > 180:
+        if days >= 9999:
+            reasons.append(_("Nunca visitado"))
+        elif days > 180:
             reasons.append(_("Sin visita > 6 meses"))
         elif days > 90:
             reasons.append(_("Sin visita > 3 meses"))
@@ -148,7 +170,7 @@ class CommercialVisitPlanner(models.TransientModel):
             reasons.append(_("Sin visita > 2 meses"))
 
         if partner.commercial_alert_declining:
-            reasons.append(_("Tendencia en declive"))
+            reasons.append(_("En declive"))
         if partner.commercial_alert_opportunity:
             reasons.append(_("Oportunidad cross-sell"))
 
@@ -172,8 +194,10 @@ class CommercialVisitPlanner(models.TransientModel):
         if not visita_type:
             raise UserError(_("No se encontró el tipo de actividad 'Visita Comercial'."))
 
-        # Create events starting from tomorrow
-        base_date = fields.Datetime.now() + timedelta(days=1)
+        user = self.commercial_user_id or self.env.user
+
+        # Create events starting from tomorrow, spaced 1h apart within each day
+        base_date = fields.Datetime.now().replace(hour=9, minute=0, second=0) + timedelta(days=1)
         events_created = 0
         for idx, line in enumerate(selected):
             event_start = base_date + timedelta(days=idx)
@@ -183,9 +207,9 @@ class CommercialVisitPlanner(models.TransientModel):
                 'stop': event_start + timedelta(hours=1),
                 'commercial_activity_type_id': visita_type.id,
                 'commercial_partner_id': line.partner_id.id,
-                'user_id': self.commercial_user_id.id,
+                'user_id': user.id,
                 'partner_ids': [
-                    (4, self.commercial_user_id.partner_id.id),
+                    (4, user.partner_id.id),
                     (4, line.partner_id.id),
                 ],
             })
@@ -237,6 +261,6 @@ class CommercialVisitPlannerLine(models.TransientModel):
         readonly=True,
     )
     days_since_visit = fields.Integer(
-        string='Días',
+        string='Días s/ visita',
         readonly=True,
     )
