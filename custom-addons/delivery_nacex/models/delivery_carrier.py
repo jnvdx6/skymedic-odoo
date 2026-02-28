@@ -447,25 +447,22 @@ class NacexDeliveryCarrier(models.Model):
             )
             pdf_label_data = self._nacex_decode_label(label_text)
 
-            # Create attachment directly on the picking so delivery_iot can
-            # find it via 'name ILIKE Label%' + res_model=stock.picking
-            label_name = f"LabelNacex-{tracking_number}.pdf"
-            self.env["ir.attachment"].create({
-                "name": label_name,
-                "type": "binary",
-                "datas": base64.b64encode(pdf_label_data),
-                "res_model": "stock.picking",
-                "res_id": picking.id,
-                "mimetype": "application/pdf",
-            })
+            # Use standard label prefix (LabelShipping-nacex) so delivery_iot
+            # can find it via 'name ILIKE Label%' + res_model=stock.picking.
+            # Attach via message_post(attachments=...) following the same
+            # pattern as FedEx/UPS/DHL for proper IoT auto-printing.
+            label_name = "%s-%s.pdf" % (
+                self._get_delivery_label_prefix(), tracking_number,
+            )
+            attachments = [(label_name, pdf_label_data)]
 
             service_label = self._nacex_service_label()
             recipient = picking.partner_id
             n_packages = self._nacex_get_package_count(picking)
             weight = self._nacex_get_weight(picking)
 
-            # Rich HTML message on picking chatter
-            picking.message_post(body=Markup(
+            # Rich HTML message on picking chatter (with label as attachment)
+            logmessage = Markup(
                 "<b>Envío NACEX creado</b><br/>"
                 "<b>Servicio:</b> {service}<br/>"
                 "<b>Expedición:</b> {expedition}<br/>"
@@ -483,7 +480,8 @@ class NacexDeliveryCarrier(models.Model):
                 partner=recipient.name or "",
                 city=recipient.city or "",
                 zip=recipient.zip or "",
-            ))
+            )
+            picking.message_post(body=logmessage, attachments=attachments)
 
             # Notify the originating sale order
             self._nacex_notify_sale_order(
@@ -635,30 +633,26 @@ class NacexDeliveryCarrier(models.Model):
         )
         pdf_data = self._nacex_decode_label(label_text)
 
-        # Attach to picking
-        label_name = f"LabelNacex-RETURN-{ret_tracking}.pdf"
-        self.env["ir.attachment"].create({
-            "name": label_name,
-            "type": "binary",
-            "datas": base64.b64encode(pdf_data),
-            "res_model": "stock.picking",
-            "res_id": picking.id,
-            "mimetype": "application/pdf",
-        })
-
+        # Use standard return label prefix for delivery_iot compatibility
+        label_name = "%s-%s.pdf" % (
+            self.get_return_label_prefix(), ret_tracking,
+        )
         ret_url = self._nacex_tracking_url(
             self._nacex_get_agency_code(picking), ret_tracking,
         )
-        picking.message_post(body=Markup(
-            "<b>Etiqueta de DEVOLUCIÓN NACEX creada</b><br/>"
-            "<b>Expedición:</b> {expedition}<br/>"
-            "<b>Seguimiento:</b> "
-            "<a href=\"{url}\" target=\"_blank\">{tracking}</a>"
-        ).format(
-            expedition=ret_expedition,
-            url=ret_url,
-            tracking=ret_tracking,
-        ))
+        picking.message_post(
+            body=Markup(
+                "<b>Etiqueta de DEVOLUCIÓN NACEX creada</b><br/>"
+                "<b>Expedición:</b> {expedition}<br/>"
+                "<b>Seguimiento:</b> "
+                "<a href=\"{url}\" target=\"_blank\">{tracking}</a>"
+            ).format(
+                expedition=ret_expedition,
+                url=ret_url,
+                tracking=ret_tracking,
+            ),
+            attachments=[(label_name, pdf_data)],
+        )
         return ret_tracking
 
     # ---- Cancel ----
@@ -963,7 +957,11 @@ class NacexDeliveryCarrier(models.Model):
             account=account,
         )
         pdf_data = self._nacex_decode_label(label_text)
-        label_name = f"LabelNacex-{shipment.tracking_ref or shipment.name}_reprint.pdf"
+        # Use standard label prefix for delivery_iot compatibility
+        label_name = "%s-%s_reprint.pdf" % (
+            self._get_delivery_label_prefix(),
+            shipment.tracking_ref or shipment.name,
+        )
         attachment = self.env["ir.attachment"].create({
             "name": label_name,
             "type": "binary",
@@ -974,14 +972,12 @@ class NacexDeliveryCarrier(models.Model):
         })
         # Also create on the picking for IoT printing
         if shipment.picking_id:
-            self.env["ir.attachment"].create({
-                "name": label_name,
-                "type": "binary",
-                "datas": base64.b64encode(pdf_data),
-                "res_model": "stock.picking",
-                "res_id": shipment.picking_id.id,
-                "mimetype": "application/pdf",
-            })
+            shipment.picking_id.message_post(
+                body=Markup(
+                    "Etiqueta reimpresa para <b>{ref}</b>"
+                ).format(ref=shipment.tracking_ref or shipment.name),
+                attachments=[(label_name, pdf_data)],
+            )
         if "shipping.label" in self.env:
             self.env["shipping.label"].create({
                 "shipment_id": shipment.id,
