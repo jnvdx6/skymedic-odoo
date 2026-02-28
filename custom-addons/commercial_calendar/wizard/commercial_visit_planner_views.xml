@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <!-- Visit Planner Wizard Form -->
+    <record id="view_commercial_visit_planner_form" model="ir.ui.view">
+        <field name="name">commercial.visit.planner.form</field>
+        <field name="model">commercial.visit.planner</field>
+        <field name="arch" type="xml">
+            <form string="Planificador de Visitas">
+                <!-- Filters Panel -->
+                <group>
+                    <group string="Filtros">
+                        <field name="commercial_user_id"/>
+                        <field name="min_score"/>
+                        <field name="max_results"/>
+                    </group>
+                    <group string="Solo mostrar">
+                        <field name="only_overdue"/>
+                        <field name="only_declining"/>
+                        <field name="only_opportunity"/>
+                    </group>
+                </group>
+
+                <div class="mb-3">
+                    <button string="Buscar Clientes"
+                        name="action_search"
+                        type="object"
+                        class="btn-primary"
+                        icon="fa-search"/>
+                </div>
+
+                <!-- Results -->
+                <field name="line_ids" nolabel="1">
+                    <list editable="bottom"
+                        decoration-danger="priority_score &gt;= 70"
+                        decoration-warning="priority_score &gt;= 40 and priority_score &lt; 70"
+                        default_order="priority_score desc">
+                        <field name="selected"/>
+                        <field name="partner_id"/>
+                        <field name="priority_score" string="Prioridad"
+                            decoration-bf="1"/>
+                        <field name="reason"/>
+                        <field name="commercial_score" string="Score"/>
+                        <field name="days_since_visit" string="Días s/ visita"/>
+                    </list>
+                </field>
+
+                <footer>
+                    <button string="Programar Visitas Seleccionadas"
+                        name="action_schedule_selected"
+                        type="object"
+                        class="btn-primary"
+                        icon="fa-calendar-plus-o"/>
+                    <button string="Cerrar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Visit Planner Action -->
+    <record id="action_commercial_visit_planner" model="ir.actions.act_window">
+        <field name="name">Planificador de Visitas</field>
+        <field name="res_model">commercial.visit.planner</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

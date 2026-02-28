@@ -1,0 +1,200 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <!-- Partner Form: Ficha Comercial completa -->
+    <record id="view_partner_form_commercial" model="ir.ui.view">
+        <field name="name">res.partner.form.commercial_calendar</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Stat button -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button class="oe_stat_button" type="object"
+                    name="action_view_commercial_events"
+                    icon="fa-briefcase">
+                    <field string="Act. Comerciales" name="commercial_event_count"
+                        widget="statinfo"/>
+                </button>
+            </xpath>
+
+            <!-- Commercial user in header area -->
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="commercial_user_id"
+                    widget="many2one_avatar_user"
+                    placeholder="Comercial asignado..."/>
+            </xpath>
+
+            <!-- Ficha Comercial Tab (replaces old Actividad Comercial tab) -->
+            <xpath expr="//page[@name='internal_notes']" position="after">
+                <page name="commercial_activities" string="Ficha Comercial">
+
+                    <!-- KPIs Row -->
+                    <div class="row mb-3">
+                        <!-- Card 1: Puntuación Comercial -->
+                        <div class="col-lg-2 col-md-4 col-sm-6 mb-2">
+                            <div class="card text-center h-100">
+                                <div class="card-body p-2">
+                                    <small class="text-muted d-block">Puntuación</small>
+                                    <h3 class="mb-0">
+                                        <field name="commercial_score" widget="float"
+                                            options="{'digits': [3, 0]}"/>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Card 2: Días sin visita -->
+                        <div class="col-lg-2 col-md-4 col-sm-6 mb-2">
+                            <div class="card text-center h-100">
+                                <div class="card-body p-2">
+                                    <small class="text-muted d-block">Días sin visita</small>
+                                    <h3 class="mb-0">
+                                        <field name="days_since_last_visit"
+                                            decoration-success="days_since_last_visit &lt; 30"
+                                            decoration-warning="days_since_last_visit &gt;= 30 and days_since_last_visit &lt; 60"
+                                            decoration-danger="days_since_last_visit &gt;= 60"/>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Card 3: Visitas YTD -->
+                        <div class="col-lg-2 col-md-4 col-sm-6 mb-2">
+                            <div class="card text-center h-100">
+                                <div class="card-body p-2">
+                                    <small class="text-muted d-block">Visitas este año</small>
+                                    <h3 class="mb-0">
+                                        <field name="visit_count_ytd"/> /
+                                        <field name="visit_frequency_target"/>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Alerts Section -->
+                    <div class="mb-3"
+                        invisible="not commercial_alert_overdue and not commercial_alert_declining and not commercial_alert_opportunity">
+                        <field name="commercial_alert_overdue" invisible="1"/>
+                        <field name="commercial_alert_declining" invisible="1"/>
+                        <field name="commercial_alert_opportunity" invisible="1"/>
+                        <span class="badge text-bg-danger me-1"
+                            invisible="not commercial_alert_overdue">
+                            <i class="fa fa-clock-o"/> Sin visitar
+                        </span>
+                        <span class="badge text-bg-warning me-1"
+                            invisible="not commercial_alert_declining">
+                            <i class="fa fa-arrow-down"/> En declive
+                        </span>
+                        <span class="badge text-bg-success me-1"
+                            invisible="not commercial_alert_opportunity">
+                            <i class="fa fa-lightbulb-o"/> Oportunidad cross-sell
+                        </span>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="mb-3">
+                        <button string="Registrar Visita"
+                            type="object" name="action_quick_log_visit"
+                            class="btn-primary me-1" icon="fa-map-marker"/>
+                        <button string="Registrar Llamada"
+                            type="object" name="action_quick_log_call"
+                            class="btn-secondary me-1" icon="fa-phone"/>
+                        <button string="Programar Actividad"
+                            type="object" name="action_schedule_commercial_activity"
+                            class="btn-secondary me-1" icon="fa-calendar-plus-o"/>
+                        <button string="Ver Calendario"
+                            type="object" name="action_view_commercial_events"
+                            class="btn-secondary" icon="fa-calendar"/>
+                    </div>
+
+                    <!-- Commercial Info -->
+                    <group>
+                        <group string="Información Comercial">
+                            <field name="commercial_user_id" widget="many2one_avatar_user"/>
+                            <field name="visit_frequency_target"/>
+                        </group>
+                        <group string="Actividad">
+                            <field name="next_commercial_activity_date"/>
+                            <field name="next_commercial_activity_type"/>
+                            <field name="last_commercial_activity_date"/>
+                        </group>
+                    </group>
+
+                    <!-- History -->
+                    <separator string="Historial de Actividades Comerciales"/>
+                    <field name="commercial_event_ids" readonly="1">
+                        <list decoration-danger="commercial_status == 'overdue'"
+                              decoration-warning="commercial_status == 'today'"
+                              decoration-success="commercial_status == 'done'"
+                              decoration-info="commercial_status == 'planned'">
+                            <field name="name"/>
+                            <field name="commercial_activity_type_id" string="Tipo"/>
+                            <field name="start" string="Fecha"/>
+                            <field name="commercial_status" string="Estado"
+                                widget="badge"
+                                decoration-danger="commercial_status == 'overdue'"
+                                decoration-warning="commercial_status == 'today'"
+                                decoration-success="commercial_status == 'done'"
+                                decoration-info="commercial_status == 'planned'"/>
+                            <field name="user_id" widget="many2one_avatar_user"
+                                string="Responsable"/>
+                            <field name="commercial_feedback" optional="hide"
+                                string="Feedback"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Partner list view: add commercial fields -->
+    <record id="view_partner_tree_commercial" model="ir.ui.view">
+        <field name="name">res.partner.list.commercial_calendar</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='phone']" position="after">
+                <field name="commercial_user_id" optional="hide"
+                    string="Comercial" widget="many2one_avatar_user"/>
+                <field name="commercial_score" optional="hide"
+                    string="Puntuación"/>
+                <field name="days_since_last_visit" optional="hide"
+                    string="Días sin visita"/>
+                <field name="next_commercial_activity_date" optional="hide"
+                    string="Próxima Act. Comercial"/>
+                <field name="next_commercial_activity_type" optional="hide"
+                    string="Tipo Act. Comercial"/>
+                <field name="commercial_event_count" optional="hide"
+                    string="Eventos Comerciales"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Partner search: add commercial filters -->
+    <record id="view_partner_search_commercial" model="ir.ui.view">
+        <field name="name">res.partner.search.commercial_calendar</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='inactive']" position="before">
+                <separator/>
+                <filter string="Mis Clientes" name="my_clients"
+                    domain="[('commercial_user_id', '=', uid)]"/>
+                <filter string="Con Actividad Pendiente" name="has_commercial_activity"
+                    domain="[('next_commercial_activity_date', '!=', False)]"/>
+                <filter string="Sin Actividad Comercial" name="no_commercial_activity"
+                    domain="[('commercial_event_ids', '=', False)]"/>
+                <filter string="Visitas Vencidas" name="overdue_visits"
+                    domain="[('commercial_alert_overdue', '=', True)]"/>
+                <filter string="En Declive" name="declining"
+                    domain="[('commercial_alert_declining', '=', True)]"/>
+                <filter string="Oportunidad Cross-sell" name="crosssell_opportunity"
+                    domain="[('commercial_alert_opportunity', '=', True)]"/>
+                <separator/>
+                <filter string="Comercial Asignado" name="group_commercial_user"
+                    context="{'group_by': 'commercial_user_id'}"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

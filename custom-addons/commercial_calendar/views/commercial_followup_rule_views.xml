@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <!-- Follow-up Rules List View (Editable) -->
+    <record id="view_commercial_followup_rule_list" model="ir.ui.view">
+        <field name="name">commercial.followup.rule.list</field>
+        <field name="model">commercial.followup.rule</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="trigger_activity_type_id"/>
+                <field name="followup_activity_type_id"/>
+                <field name="delay_days"/>
+                <field name="auto_create_event"/>
+                <field name="summary_template" optional="hide"/>
+                <field name="active" column_invisible="True"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Follow-up Rules Form View -->
+    <record id="view_commercial_followup_rule_form" model="ir.ui.view">
+        <field name="name">commercial.followup.rule.form</field>
+        <field name="model">commercial.followup.rule</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Nombre de la regla"/></h1>
+                    </div>
+                    <group>
+                        <group string="Disparador">
+                            <field name="trigger_activity_type_id"/>
+                            <field name="active"/>
+                        </group>
+                        <group string="Seguimiento">
+                            <field name="followup_activity_type_id"/>
+                            <field name="delay_days"/>
+                            <field name="auto_create_event"/>
+                        </group>
+                    </group>
+                    <group string="Plantilla">
+                        <field name="summary_template"
+                            placeholder="Ej: Seguimiento visita - {partner}"/>
+                        <field name="note_template" placeholder="Nota del seguimiento..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Follow-up Rules Action -->
+    <record id="action_commercial_followup_rule" model="ir.actions.act_window">
+        <field name="name">Reglas de Seguimiento</field>
+        <field name="res_model">commercial.followup.rule</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Crear una regla de seguimiento
+            </p>
+            <p>Las reglas de seguimiento crean actividades automáticamente cuando se completa una actividad comercial.</p>
+        </field>
+    </record>
+
+</odoo>
