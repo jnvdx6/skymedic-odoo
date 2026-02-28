@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="frequency_tag_recurring" model="partner.frequency.tag">
+        <field name="name">Recurrente (12+/año)</field>
+        <field name="sequence">1</field>
+        <field name="min_orders_per_year">12</field>
+        <field name="max_orders_per_year">0</field>
+        <field name="color">10</field>
+    </record>
+
+    <record id="frequency_tag_regular" model="partner.frequency.tag">
+        <field name="name">Regular (4-11/año)</field>
+        <field name="sequence">2</field>
+        <field name="min_orders_per_year">4</field>
+        <field name="max_orders_per_year">12</field>
+        <field name="color">4</field>
+    </record>
+
+    <record id="frequency_tag_occasional" model="partner.frequency.tag">
+        <field name="name">Ocasional (2-3/año)</field>
+        <field name="sequence">3</field>
+        <field name="min_orders_per_year">2</field>
+        <field name="max_orders_per_year">4</field>
+        <field name="color">2</field>
+    </record>
+
+    <record id="frequency_tag_single" model="partner.frequency.tag">
+        <field name="name">Compra única (1 pedido)</field>
+        <field name="sequence">4</field>
+        <field name="min_orders_per_year">0</field>
+        <field name="max_orders_per_year">2</field>
+        <field name="color">9</field>
+    </record>
+
+</odoo>

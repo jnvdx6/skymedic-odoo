@@ -1,4 +1,5 @@
 import logging
+from datetime import timedelta
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
@@ -9,9 +10,17 @@ SHIPMENT_STATES = [
     ("draft", "Borrador"),
     ("confirmed", "Confirmado"),
     ("in_transit", "En tránsito"),
+    ("incident", "Incidencia"),
     ("delivered", "Entregado"),
     ("cancelled", "Cancelado"),
     ("returned", "Devuelto"),
+]
+
+SLA_STATUS = [
+    ("on_time", "En plazo"),
+    ("warning", "Próximo a vencer"),
+    ("overdue", "Fuera de plazo"),
+    ("na", "N/A"),
 ]
 
 
@@ -135,6 +144,38 @@ class ShippingShipment(models.Model):
         copy=False,
     )
 
+    # ---- SLA ----
+
+    sla_deadline = fields.Date(
+        string="Fecha límite SLA",
+        compute="_compute_sla_deadline",
+        store=True,
+    )
+    sla_status = fields.Selection(
+        SLA_STATUS,
+        string="Estado SLA",
+        compute="_compute_sla_status",
+        store=True,
+    )
+
+    # ---- Return ----
+
+    return_shipment_id = fields.Many2one(
+        "shipping.shipment",
+        string="Envío de devolución",
+        copy=False,
+    )
+    original_shipment_id = fields.Many2one(
+        "shipping.shipment",
+        string="Envío original",
+        copy=False,
+    )
+    is_return = fields.Boolean(
+        string="Es devolución",
+        default=False,
+        copy=False,
+    )
+
     # ---- Labels ----
 
     label_ids = fields.One2many(
@@ -166,6 +207,47 @@ class ShippingShipment(models.Model):
     def _compute_label_count(self):
         for shipment in self:
             shipment.label_count = len(shipment.label_ids)
+
+    @api.depends("ship_date", "carrier_id.sla_delivery_days")
+    def _compute_sla_deadline(self):
+        for shipment in self:
+            if shipment.ship_date and shipment.carrier_id.sla_delivery_days:
+                ship_date = shipment.ship_date.date()
+                shipment.sla_deadline = ship_date + timedelta(
+                    days=shipment.carrier_id.sla_delivery_days,
+                )
+            else:
+                shipment.sla_deadline = False
+
+    @api.depends("sla_deadline", "state", "delivery_date")
+    def _compute_sla_status(self):
+        today = fields.Date.context_today(self)
+        for shipment in self:
+            if shipment.state in ("cancelled", "draft"):
+                shipment.sla_status = "na"
+            elif shipment.state == "delivered":
+                if (
+                    shipment.delivery_date
+                    and shipment.sla_deadline
+                ):
+                    delivered_date = shipment.delivery_date.date()
+                    shipment.sla_status = (
+                        "on_time"
+                        if delivered_date <= shipment.sla_deadline
+                        else "overdue"
+                    )
+                else:
+                    shipment.sla_status = "na"
+            elif shipment.state == "returned":
+                shipment.sla_status = "overdue"
+            elif not shipment.sla_deadline:
+                shipment.sla_status = "na"
+            elif today > shipment.sla_deadline:
+                shipment.sla_status = "overdue"
+            elif today >= shipment.sla_deadline - timedelta(days=1):
+                shipment.sla_status = "warning"
+            else:
+                shipment.sla_status = "on_time"
 
     # ---- CRUD ----
 
@@ -226,6 +308,59 @@ class ShippingShipment(models.Model):
         self.filtered(lambda s: s.state == "cancelled").write({
             "state": "draft",
         })
+
+    # ---- Returns ----
+
+    def action_generate_return(self):
+        """Generate a return shipment from the carrier API."""
+        self.ensure_one()
+        if self.state not in ("in_transit", "delivered", "incident"):
+            raise UserError(
+                _(
+                    "Solo se pueden generar devoluciones para envíos "
+                    "en tránsito, entregados o con incidencia."
+                )
+            )
+        if self.return_shipment_id:
+            raise UserError(
+                _("Ya existe un envío de devolución: %s")
+                % self.return_shipment_id.name
+            )
+
+        result = self.carrier_id._generate_return_shipment(self)
+
+        return_vals = {
+            "picking_id": self.picking_id.id if self.picking_id else False,
+            "carrier_id": self.carrier_id.id,
+            "tracking_ref": result.get("tracking_ref"),
+            "expedition_code": result.get("expedition_code", False),
+            "state": "confirmed",
+            "ship_date": fields.Datetime.now(),
+            "is_return": True,
+            "original_shipment_id": self.id,
+        }
+        return_shipment = self.create(return_vals)
+
+        if self.picking_id:
+            self.picking_id._link_return_labels_to_shipment(
+                return_shipment, result.get("tracking_ref"),
+            )
+
+        self.return_shipment_id = return_shipment.id
+        self.message_post(
+            body=_(
+                "Envío de devolución creado: <a href='#' "
+                "data-oe-model='shipping.shipment' data-oe-id='%d'>%s</a>"
+            )
+            % (return_shipment.id, return_shipment.name),
+        )
+        return {
+            "type": "ir.actions.act_window",
+            "res_model": "shipping.shipment",
+            "res_id": return_shipment.id,
+            "view_mode": "form",
+            "target": "current",
+        }
 
     # ---- Tracking ----
 
@@ -288,3 +423,57 @@ class ShippingShipment(models.Model):
                 )
                 self.env.cr.rollback()
         _logger.info("Shipping cron: tracking update complete")
+
+    @api.model
+    def _cron_check_sla_alerts(self):
+        """Scheduled action: create activities for shipments exceeding SLA."""
+        today = fields.Date.context_today(self)
+        overdue_shipments = self.search([
+            ("state", "in", ("confirmed", "in_transit", "incident")),
+            ("sla_deadline", "!=", False),
+            ("sla_deadline", "<", today),
+        ])
+        _logger.info(
+            "SLA cron: found %d overdue shipments", len(overdue_shipments),
+        )
+        activity_type = self.env.ref(
+            "mail.mail_activity_data_todo", raise_if_not_found=False,
+        )
+        if not activity_type:
+            _logger.warning("SLA cron: mail_activity_data_todo not found")
+            return
+
+        for shipment in overdue_shipments:
+            existing = self.env["mail.activity"].search([
+                ("res_model", "=", "shipping.shipment"),
+                ("res_id", "=", shipment.id),
+                ("activity_type_id", "=", activity_type.id),
+                ("summary", "ilike", "SLA"),
+            ], limit=1)
+            if existing:
+                continue
+
+            user_id = False
+            if shipment.picking_id and shipment.picking_id.sale_id:
+                user_id = shipment.picking_id.sale_id.user_id.id
+            if not user_id:
+                user_id = self.env.uid
+
+            days_overdue = (today - shipment.sla_deadline).days
+            shipment.activity_schedule(
+                act_type_xmlid="mail.mail_activity_data_todo",
+                summary=_("SLA superado (%d día(s) de retraso)") % days_overdue,
+                note=_(
+                    "El envío %s lleva %d día(s) sin entregarse. "
+                    "Plazo SLA: %s. Transportista: %s."
+                )
+                % (
+                    shipment.name,
+                    days_overdue,
+                    shipment.sla_deadline,
+                    shipment.carrier_id.name,
+                ),
+                date_deadline=today,
+                user_id=user_id,
+            )
+        _logger.info("SLA cron: alert check complete")

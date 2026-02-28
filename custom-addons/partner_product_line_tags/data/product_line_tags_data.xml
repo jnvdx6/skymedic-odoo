@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="product_line_tag_cosmetica" model="partner.product.line.tag">
+        <field name="name">Cosmética Facial</field>
+        <field name="sequence">1</field>
+        <field name="product_match_pattern">colagenox,hyalurox,vitaox,retinox,fotoskinox,skinox,hairox,cream,crema,serum,mask,mascarilla</field>
+        <field name="color">1</field>
+    </record>
+
+    <record id="product_line_tag_mesoterapia" model="partner.product.line.tag">
+        <field name="name">Mesoterapia</field>
+        <field name="sequence">2</field>
+        <field name="product_match_pattern">meso ox,mesoox,mesoterapia,dutaox,pdrn</field>
+        <field name="color">2</field>
+    </record>
+
+    <record id="product_line_tag_rellenos" model="partner.product.line.tag">
+        <field name="name">Rellenos Dérmicos</field>
+        <field name="sequence">3</field>
+        <field name="product_match_pattern">modelha,relleno,filler</field>
+        <field name="color">4</field>
+    </record>
+
+    <record id="product_line_tag_exosomas" model="partner.product.line.tag">
+        <field name="name">Exosomas</field>
+        <field name="sequence">4</field>
+        <field name="product_match_pattern">exo ox,exoox,exosoma</field>
+        <field name="color">10</field>
+    </record>
+
+    <record id="product_line_tag_aparatologia" model="partner.product.line.tag">
+        <field name="name">Aparatología Estética</field>
+        <field name="sequence">5</field>
+        <field name="product_match_pattern">dermajet,ultrajet,presojet,thermojet,infrajet,drenajet,medyjet,vacuumter,ultraschok,fitto,peeling ultrasonico,marcc,smartrf,b!beauty,ems enco,ems kadira,smartpuls,unik,epiljet</field>
+        <field name="color">5</field>
+    </record>
+
+    <record id="product_line_tag_dispositivos" model="partner.product.line.tag">
+        <field name="name">Dispositivos Skymedic</field>
+        <field name="sequence">6</field>
+        <field name="product_match_pattern">fotoage,bluelift,dioxage,radioage,ledsmedical,leds medical,hr-3,hr3,east plasma,east sublimacion,carbo2,carbtek,dc3,massager</field>
+        <field name="color">6</field>
+    </record>
+
+    <record id="product_line_tag_equipos" model="partner.product.line.tag">
+        <field name="name">Equipos Médicos</field>
+        <field name="sequence">7</field>
+        <field name="product_match_pattern">etherea,hegels,sapphire,sculptor,nirvana,spartan,sonoage,hemobye,evelab,crystal injector,crystal meso,skypure</field>
+        <field name="color">7</field>
+    </record>
+
+    <record id="product_line_tag_consumibles" model="partner.product.line.tag">
+        <field name="name">Consumibles y Recambios</field>
+        <field name="sequence">8</field>
+        <field name="product_match_pattern">agujas,canula,filtro ipl,plastico protector,lampara hp,recambio,repuesto,recarga</field>
+        <field name="color">8</field>
+    </record>
+
+    <record id="product_line_tag_servicio" model="partner.product.line.tag">
+        <field name="name">Servicio Técnico</field>
+        <field name="sequence">9</field>
+        <field name="product_match_pattern">reparacion,revision,mantenimiento,servicio tecnico</field>
+        <field name="color">9</field>
+    </record>
+
+    <record id="product_line_tag_material" model="partner.product.line.tag">
+        <field name="name">Material Profesional</field>
+        <field name="sequence">10</field>
+        <field name="product_match_pattern">catalogo,folleto,dossier,muestra,sample,formacion,curso</field>
+        <field name="color">3</field>
+    </record>
+
+</odoo>

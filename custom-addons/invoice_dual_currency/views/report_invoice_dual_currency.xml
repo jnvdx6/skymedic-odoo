@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Placeholder: the inheriting QWeb view for dual currency is created
+        programmatically in __init__.py _post_init_hook because the parent
+        view (Studio-created copy_2) does not have a stable XML ID.
+    -->
+</odoo>

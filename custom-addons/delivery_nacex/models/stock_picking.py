@@ -1,5 +1,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
+from markupsafe import Markup
+
 from odoo import fields, models
 from odoo.exceptions import UserError
 
@@ -53,4 +55,29 @@ class StockPicking(models.Model):
             "view_mode": "form",
             "target": "new",
             "context": {"default_picking_id": self.id},
+        }
+
+    def action_nacex_return_label(self):
+        """Generate a return label for this NACEX shipment."""
+        self.ensure_one()
+        if not self.carrier_tracking_ref:
+            raise UserError(
+                self.env._(
+                    "No hay referencia de seguimiento. "
+                    "Primero envíe el albarán al transportista."
+                )
+            )
+        self.carrier_id.nacex_get_return_label(self)
+        return {
+            "type": "ir.actions.client",
+            "tag": "display_notification",
+            "params": {
+                "title": self.env._("Etiqueta de devolución"),
+                "message": self.env._(
+                    "Se ha generado la etiqueta de devolución NACEX. "
+                    "Puede descargarla desde los adjuntos."
+                ),
+                "type": "success",
+                "sticky": False,
+            },
         }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- Smart button on stock.picking form -->
+    <!-- Smart buttons on stock.picking form -->
     <record id="view_picking_form_shipping" model="ir.ui.view">
         <field name="name">stock.picking.form.shipping.management</field>
         <field name="model">stock.picking</field>
@@ -15,6 +15,20 @@
                         invisible="shipment_count == 0">
                     <field name="shipment_count" widget="statinfo"
                            string="Envíos"/>
+                </button>
+                <button name="action_download_shipping_label"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-download"
+                        invisible="shipment_count == 0">
+                    <span class="o_stat_text">Etiqueta</span>
+                </button>
+                <button name="action_compare_carriers"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-balance-scale"
+                        invisible="carrier_tracking_ref or state != 'done'">
+                    <span class="o_stat_text">Comparar</span>
                 </button>
             </div>
         </field>

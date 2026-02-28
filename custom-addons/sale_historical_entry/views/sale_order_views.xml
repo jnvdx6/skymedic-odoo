@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_order_form_historical_entry" model="ir.ui.view">
+        <field name="name">sale.order.form.historical.entry</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Campo oculto auxiliar para condicionar readonly -->
+            <xpath expr="//field[@name='state'][@widget='statusbar']" position="after">
+                <field name="is_sale_manager" invisible="1"/>
+            </xpath>
+
+            <!-- Fecha del pedido editable para Sales Managers en pedidos confirmados -->
+            <xpath expr="//field[@name='date_order'][@invisible=&quot;state in ['draft', 'sent']&quot;]" position="attributes">
+                <attribute name="readonly">state == 'cancel' or (state == 'sale' and not is_sale_manager)</attribute>
+            </xpath>
+
+            <!-- Opciones de entrada histórica en pestaña Otra información -->
+            <xpath expr="//group[@name='sale_reporting']" position="after">
+                <group name="historical_entry" string="Opciones de entrada histórica"
+                       groups="sales_team.group_sale_manager"
+                       invisible="state == 'cancel'">
+                    <field name="custom_date_order"
+                           readonly="state == 'sale'"/>
+                    <field name="skip_delivery_creation"
+                           readonly="state == 'sale'"/>
+                    <field name="force_all_invoiced"
+                           invisible="state != 'sale'"/>
+                </group>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

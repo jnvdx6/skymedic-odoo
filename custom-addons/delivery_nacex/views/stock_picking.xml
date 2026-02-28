@@ -43,6 +43,15 @@
                     invisible="carrier_id.delivery_type != 'nacex' or not carrier_tracking_ref or state != 'done'"
                     icon="fa-calendar"
                 />
+                <button
+                    name="action_nacex_return_label"
+                    string="Etiqueta devolución NACEX"
+                    type="object"
+                    class="btn btn-secondary"
+                    invisible="carrier_id.delivery_type != 'nacex' or not carrier_tracking_ref or state != 'done'"
+                    icon="fa-undo"
+                    confirm="Se generará una etiqueta de devolución en NACEX. ¿Continuar?"
+                />
             </xpath>
         </field>
     </record>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="trend_tag_new" model="partner.trend.tag">
+        <field name="name">Nuevo</field>
+        <field name="trend_type">new</field>
+        <field name="sequence">1</field>
+        <field name="color">11</field>
+    </record>
+
+    <record id="trend_tag_growth" model="partner.trend.tag">
+        <field name="name">En crecimiento &#x2191;</field>
+        <field name="trend_type">growth</field>
+        <field name="sequence">2</field>
+        <field name="color">10</field>
+    </record>
+
+    <record id="trend_tag_stable" model="partner.trend.tag">
+        <field name="name">Estable &#x2192;</field>
+        <field name="trend_type">stable</field>
+        <field name="sequence">3</field>
+        <field name="color">4</field>
+    </record>
+
+    <record id="trend_tag_decline" model="partner.trend.tag">
+        <field name="name">En declive &#x2193;</field>
+        <field name="trend_type">decline</field>
+        <field name="sequence">4</field>
+        <field name="color">1</field>
+    </record>
+
+    <record id="trend_tag_recovered" model="partner.trend.tag">
+        <field name="name">Recuperado &#x21BA;</field>
+        <field name="trend_type">recovered</field>
+        <field name="sequence">5</field>
+        <field name="color">2</field>
+    </record>
+
+    <record id="trend_tag_inactive" model="partner.trend.tag">
+        <field name="name">Inactivo</field>
+        <field name="trend_type">inactive</field>
+        <field name="sequence">6</field>
+        <field name="color">9</field>
+    </record>
+
+</odoo>

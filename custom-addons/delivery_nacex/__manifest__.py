@@ -1,7 +1,7 @@
 {
     "name": "Delivery NACEX",
     "summary": "Integración de operaciones de envío NACEX desde Odoo",
-    "version": "19.0.2.0.0",
+    "version": "19.0.3.0.0",
     "category": "Inventory/Delivery",
     "author": "Open Source Integrators, Odoo Community Association (OCA)",
     "maintainer": "Open Source Integrators",
@@ -14,6 +14,7 @@
     ],
     "data": [
         "security/ir.model.access.csv",
+        "data/nacex_email_template.xml",
         "wizard/nacex_pickup_wizard.xml",
         "views/delivery_carrier.xml",
         "views/stock_picking.xml",

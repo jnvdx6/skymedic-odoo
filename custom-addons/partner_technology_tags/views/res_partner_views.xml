@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Add technology tags to partner form -->
+    <record id="view_partner_form_technology_tags" model="ir.ui.view">
+        <field name="name">res.partner.form.technology.tags</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="priority">50</field>
+        <field name="arch" type="xml">
+            <field name="category_id" position="after">
+                <label for="technology_tag_ids"/>
+                <div class="d-flex align-items-center gap-2">
+                    <field name="technology_tag_ids" widget="many2many_tags"
+                           options="{'color_field': 'color'}"
+                           placeholder="Tecnologías del cliente..."
+                           class="flex-grow-1"/>
+                    <button name="action_recompute_technology_tags" type="object"
+                            string="⟳" title="Actualizar tecnologías desde historial de ventas"
+                            class="btn btn-link p-0"/>
+                </div>
+            </field>
+        </field>
+    </record>
+
+    <!-- Add technology tags filter to partner list/search -->
+    <record id="view_partner_search_technology_tags" model="ir.ui.view">
+        <field name="name">res.partner.search.technology.tags</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <field name="category_id" position="after">
+                <field name="technology_tag_ids" string="Tecnología"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

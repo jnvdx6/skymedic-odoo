@@ -33,12 +33,18 @@
                             string="Devuelto"
                             type="object"
                             invisible="state not in ('in_transit', 'delivered')"/>
+                    <button name="action_generate_return"
+                            string="Generar devolución"
+                            type="object"
+                            class="btn-secondary"
+                            invisible="state not in ('in_transit', 'delivered', 'incident') or return_shipment_id"
+                            confirm="¿Generar etiqueta y envío de devolución?"/>
                     <button name="action_reset_to_draft"
                             string="Volver a borrador"
                             type="object"
                             invisible="state != 'cancelled'"/>
                     <field name="state" widget="statusbar"
-                           statusbar_visible="draft,confirmed,in_transit,delivered"/>
+                           statusbar_visible="draft,confirmed,in_transit,incident,delivered"/>
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
@@ -63,6 +69,11 @@
                             <field name="origin"/>
                             <field name="ship_date"/>
                             <field name="delivery_date"/>
+                            <field name="sla_deadline"/>
+                            <field name="sla_status" widget="badge"
+                                   decoration-success="sla_status == 'on_time'"
+                                   decoration-warning="sla_status == 'warning'"
+                                   decoration-danger="sla_status == 'overdue'"/>
                         </group>
                         <group string="Transportista">
                             <field name="carrier_id"/>
@@ -92,6 +103,14 @@
                         <field name="tracking_url" widget="url"/>
                         <field name="last_tracking_update"/>
                         <field name="tracking_status_raw" readonly="1"/>
+                    </group>
+                    <group string="Devolución"
+                           invisible="not return_shipment_id and not original_shipment_id">
+                        <field name="return_shipment_id"
+                               invisible="not return_shipment_id"/>
+                        <field name="original_shipment_id"
+                               invisible="not original_shipment_id"/>
+                        <field name="is_return" invisible="1"/>
                     </group>
                     <notebook>
                         <page string="Etiquetas" name="labels">
@@ -138,12 +157,17 @@
                 <field name="delivery_date" optional="hide"/>
                 <field name="number_of_packages" optional="hide"/>
                 <field name="shipping_cost" optional="show" sum="Total"/>
+                <field name="sla_status" widget="badge" optional="show"
+                       decoration-success="sla_status == 'on_time'"
+                       decoration-warning="sla_status == 'warning'"
+                       decoration-danger="sla_status == 'overdue'"
+                       decoration-muted="sla_status == 'na'"/>
                 <field name="state" widget="badge"
                        decoration-info="state == 'draft'"
                        decoration-primary="state == 'confirmed'"
                        decoration-warning="state == 'in_transit'"
-                       decoration-success="state == 'delivered'"
-                       decoration-danger="state in ('cancelled', 'returned')"/>
+                       decoration-danger="state in ('cancelled', 'returned', 'incident')"
+                       decoration-success="state == 'delivered'"/>
             </list>
         </field>
     </record>
@@ -221,6 +245,13 @@
                 <separator/>
                 <filter name="filter_active" string="Activos"
                         domain="[('state', 'in', ('confirmed', 'in_transit'))]"/>
+                <filter name="filter_returns" string="Devoluciones"
+                        domain="[('is_return', '=', True)]"/>
+                <separator/>
+                <filter name="filter_sla_overdue" string="Fuera de plazo SLA"
+                        domain="[('sla_status', '=', 'overdue')]"/>
+                <filter name="filter_sla_warning" string="SLA próximo a vencer"
+                        domain="[('sla_status', '=', 'warning')]"/>
                 <separator/>
                 <filter name="filter_today" string="Hoy"
                         domain="[('ship_date', '&gt;=', context_today().strftime('%%Y-%%m-%%d'))]"/>

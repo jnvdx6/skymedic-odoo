@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Add crosssell tags to partner form -->
+    <record id="view_partner_form_crosssell_tags" model="ir.ui.view">
+        <field name="name">res.partner.form.crosssell.tags</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="priority">56</field>
+        <field name="arch" type="xml">
+            <field name="category_id" position="after">
+                <label for="crosssell_tag_ids"/>
+                <div class="d-flex align-items-center gap-2">
+                    <field name="crosssell_tag_ids" widget="many2many_tags"
+                           options="{'color_field': 'color'}"
+                           placeholder="Oportunidades cross-sell..."
+                           class="flex-grow-1"/>
+                    <button name="action_recompute_crosssell_tags" type="object"
+                            string="&#x27F3;" title="Actualizar cross-sell desde historial de ventas"
+                            class="btn btn-link p-0"/>
+                </div>
+            </field>
+        </field>
+    </record>
+
+    <!-- Add crosssell tags filter to partner search -->
+    <record id="view_partner_search_crosssell_tags" model="ir.ui.view">
+        <field name="name">res.partner.search.crosssell.tags</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <field name="category_id" position="after">
+                <field name="crosssell_tag_ids" string="Cross-sell"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

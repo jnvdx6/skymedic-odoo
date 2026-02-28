@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Tree View -->
+    <record id="partner_crosssell_tag_view_list" model="ir.ui.view">
+        <field name="name">partner.crosssell.tag.list</field>
+        <field name="model">partner.crosssell.tag</field>
+        <field name="arch" type="xml">
+            <list string="Tags de Cross-sell" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="has_pattern"/>
+                <field name="missing_pattern"/>
+                <field name="color" widget="color_picker"/>
+                <field name="partner_count"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="partner_crosssell_tag_view_form" model="ir.ui.view">
+        <field name="name">partner.crosssell.tag.form</field>
+        <field name="model">partner.crosssell.tag</field>
+        <field name="arch" type="xml">
+            <form string="Tag de Cross-sell">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="Nombre del tag"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="has_pattern"/>
+                            <field name="missing_pattern"/>
+                        </group>
+                        <group>
+                            <field name="color" widget="color_picker"/>
+                            <field name="sequence"/>
+                            <field name="active"/>
+                            <field name="partner_count"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Clientes" name="partners">
+                            <field name="partner_ids" nolabel="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="city"/>
+                                    <field name="country_id"/>
+                                    <field name="phone"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_partner_crosssell_tag" model="ir.actions.act_window">
+        <field name="name">Tags de Cross-sell</field>
+        <field name="res_model">partner.crosssell.tag</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Crear un tag de oportunidad cross-sell
+            </p>
+            <p>
+                Los tags de cross-sell identifican oportunidades de venta cruzada
+                basadas en el historial de compras del cliente.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem
+        id="menu_partner_crosssell_tag"
+        name="Tags de Cross-sell"
+        parent="contacts.menu_contacts"
+        action="action_partner_crosssell_tag"
+        sequence="16"
+    />
+
+</odoo>

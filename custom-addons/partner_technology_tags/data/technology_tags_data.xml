@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!-- ============================================ -->
+    <!-- DISPOSITIVOS SKYMEDIC (11 tags)              -->
+    <!-- ============================================ -->
+    <record id="tech_tag_fotoage" model="partner.technology.tag">
+        <field name="name">FotoAge</field>
+        <field name="tech_category">dispositivo_skymedic</field>
+        <field name="tech_match_pattern">fotoage,foto age</field>
+        <field name="color">1</field>
+    </record>
+
+    <record id="tech_tag_bluelift" model="partner.technology.tag">
+        <field name="name">BlueLift</field>
+        <field name="tech_category">dispositivo_skymedic</field>
+        <field name="tech_match_pattern">bluelift,blue lift</field>
+        <field name="color">2</field>
+    </record>
+
+    <record id="tech_tag_dioxage" model="partner.technology.tag">
+        <field name="name">DioxAge</field>
+        <field name="tech_category">dispositivo_skymedic</field>
+        <field name="tech_match_pattern">dioxage,equipo diox</field>
+        <field name="color">3</field>
+    </record>
+
+    <record id="tech_tag_carbo2_carbtek" model="partner.technology.tag">
+        <field name="name">Carbo2 / CarbTek</field>
+        <field name="tech_category">dispositivo_skymedic</field>
+        <field name="tech_match_pattern">carbo2,carbtek</field>
+        <field name="color">4</field>
+    </record>
+
+    <record id="tech_tag_radioage" model="partner.technology.tag">
+        <field name="name">RadioAge</field>
+        <field name="tech_category">dispositivo_skymedic</field>
+        <field name="tech_match_pattern">radioage,radio age</field>
+        <field name="color">5</field>
+    </record>
+
+    <record id="tech_tag_ledsmedical" model="partner.technology.tag">
+        <field name="name">LEDs Medical</field>
+        <field name="tech_category">dispositivo_skymedic</field>
+        <field name="tech_match_pattern">ledsmedical,leds medical</field>
+        <field name="color">6</field>
+    </record>
+
+    <record id="tech_tag_hr3" model="partner.technology.tag">
+        <field name="name">HR-3 Gorra Láser</field>
+        <field name="tech_category">dispositivo_skymedic</field>
+        <field name="tech_match_pattern">hr-3,equipo hr3,gorra laser,gorra tricologia</field>
+        <field name="color">7</field>
+    </record>
+
+    <record id="tech_tag_east" model="partner.technology.tag">
+        <field name="name">EAST Plasma</field>
+        <field name="tech_category">dispositivo_skymedic</field>
+        <field name="tech_match_pattern">east plasma,east sublimacion,equipo east,agujas equipo east</field>
+        <field name="color">8</field>
+    </record>
+
+    <record id="tech_tag_dc3" model="partner.technology.tag">
+        <field name="name">DC3</field>
+        <field name="tech_category">dispositivo_skymedic</field>
+        <field name="tech_match_pattern">dc3,dark circles</field>
+        <field name="color">9</field>
+    </record>
+
+    <record id="tech_tag_pr3" model="partner.technology.tag">
+        <field name="name">PR-3</field>
+        <field name="tech_category">dispositivo_skymedic</field>
+        <field name="tech_match_pattern">pr-3,placa laser led</field>
+        <field name="color">10</field>
+    </record>
+
+    <record id="tech_tag_massager" model="partner.technology.tag">
+        <field name="name">Massager Facial</field>
+        <field name="tech_category">dispositivo_skymedic</field>
+        <field name="tech_match_pattern">massager facial</field>
+        <field name="color">11</field>
+    </record>
+
+    <!-- ============================================ -->
+    <!-- APARATOLOGIA (19 tags)                       -->
+    <!-- ============================================ -->
+    <record id="tech_tag_dermajet" model="partner.technology.tag">
+        <field name="name">DermaJet</field>
+        <field name="tech_category">aparatologia</field>
+        <field name="tech_match_pattern">dermajet</field>
+        <field name="color">1</field>
+    </record>
+
+    <record id="tech_tag_hidroage" model="partner.technology.tag">
+        <field name="name">HidroAge</field>
+        <field name="tech_category">aparatologia</field>
+        <field name="tech_match_pattern">hidroage</field>
+        <field name="color">2</field>
+    </record>
+
+    <record id="tech_tag_ultrajet" model="partner.technology.tag">
+        <field name="name">UltraJet</field>
+        <field name="tech_category">aparatologia</field>
+        <field name="tech_match_pattern">ultrajet</field>
+        <field name="color">3</field>
+    </record>
+
+    <record id="tech_tag_presojet" model="partner.technology.tag">
+        <field name="name">PresoJet / PresoPlus</field>
+        <field name="tech_category">aparatologia</field>
+        <field name="tech_match_pattern">presojet,presoplus,presoterapia</field>
+        <field name="color">4</field>
+    </record>
+
+    <record id="tech_tag_thermojet" model="partner.technology.tag">
+        <field name="name">ThermoJet</field>
+        <field name="tech_category">aparatologia</field>
+        <field name="tech_match_pattern">thermojet</field>
+        <field name="color">5</field>
+    </record>
+
+    <record id="tech_tag_infrajet" model="partner.technology.tag">
+        <field name="name">InfraJet</field>
+        <field name="tech_category">aparatologia</field>
+        <field name="tech_match_pattern">infrajet</field>
+        <field name="color">6</field>
+    </record>
+
+    <record id="tech_tag_drenajet" model="partner.technology.tag">
+        <field name="name">DrenaJet</field>
+        <field name="tech_category">aparatologia</field>
+        <field name="tech_match_pattern">drenajet</field>
+        <field name="color">7</field>
+    </record>
+
+    <record id="tech_tag_medyjet" model="partner.technology.tag">
+        <field name="name">MedyJet</field>
+        <field name="tech_category">aparatologia</field>
+        <field name="tech_match_pattern">medyjet</field>
+        <field name="color">8</field>
+    </record>
+
+    <record id="tech_tag_ems" model="partner.technology.tag">
+        <field name="name">EMS ENCO / KADIRA</field>
+        <field name="tech_category">aparatologia</field>
+        <field name="tech_match_pattern">ems enco,ems kadira</field>
+        <field name="color">9</field>
+    </record>
+
+    <record id="tech_tag_marcc" model="partner.technology.tag">
+        <field name="name">MARCC / SmartRF</field>
+        <field name="tech_category">aparatologia</field>
+        <field name="tech_match_pattern">marcc,smartrf</field>
+        <field name="color">10</field>
+    </record>
+
+    <record id="tech_tag_bbeauty" model="partner.technology.tag">
+        <field name="name">B!Beauty</field>
+        <field name="tech_category">aparatologia</field>
+        <field name="tech_match_pattern">b!beauty</field>
+        <field name="color">11</field>
+    </record>
+
+    <record id="tech_tag_smartpuls" model="partner.technology.tag">
+        <field name="name">SmartPuls</field>
+        <field name="tech_category">aparatologia</field>
+        <field name="tech_match_pattern">smartpuls</field>
+        <field name="color">1</field>
+    </record>
+
+    <record id="tech_tag_unik" model="partner.technology.tag">
+        <field name="name">UNIK</field>
+        <field name="tech_category">aparatologia</field>
+        <field name="tech_match_pattern">unik dermajet,unik vissage</field>
+        <field name="color">2</field>
+    </record>
+
+    <record id="tech_tag_ultraschok" model="partner.technology.tag">
+        <field name="name">UltraSchok</field>
+        <field name="tech_category">aparatologia</field>
+        <field name="tech_match_pattern">ultraschok,ondas de choque</field>
+        <field name="color">3</field>
+    </record>
+
+    <record id="tech_tag_fitto" model="partner.technology.tag">
+        <field name="name">FITTO</field>
+        <field name="tech_category">aparatologia</field>
+        <field name="tech_match_pattern">fitto</field>
+        <field name="color">4</field>
+    </record>
+
+    <record id="tech_tag_vacuumter" model="partner.technology.tag">
+        <field name="name">VacuumTer</field>
+        <field name="tech_category">aparatologia</field>
+        <field name="tech_match_pattern">vacuumter</field>
+        <field name="color">5</field>
+    </record>
+
+    <record id="tech_tag_peeling" model="partner.technology.tag">
+        <field name="name">Peeling Ultrasónico</field>
+        <field name="tech_category">aparatologia</field>
+        <field name="tech_match_pattern">peeling ultrasonico</field>
+        <field name="color">6</field>
+    </record>
+
+    <record id="tech_tag_epiljet" model="partner.technology.tag">
+        <field name="name">EpilJet</field>
+        <field name="tech_category">aparatologia</field>
+        <field name="tech_match_pattern">epiljet</field>
+        <field name="color">7</field>
+    </record>
+
+    <record id="tech_tag_vidix" model="partner.technology.tag">
+        <field name="name">VIDIX</field>
+        <field name="tech_category">aparatologia</field>
+        <field name="tech_match_pattern">vidix</field>
+        <field name="color">8</field>
+    </record>
+
+    <!-- ============================================ -->
+    <!-- EQUIPOS MEDICOS (11 tags)                    -->
+    <!-- ============================================ -->
+    <record id="tech_tag_etherea" model="partner.technology.tag">
+        <field name="name">Etherea MX</field>
+        <field name="tech_category">equipo_medico</field>
+        <field name="tech_match_pattern">etherea</field>
+        <field name="color">1</field>
+    </record>
+
+    <record id="tech_tag_hegels" model="partner.technology.tag">
+        <field name="name">HEGELS Láser</field>
+        <field name="tech_category">equipo_medico</field>
+        <field name="tech_match_pattern">hegels</field>
+        <field name="color">2</field>
+    </record>
+
+    <record id="tech_tag_sapphire" model="partner.technology.tag">
+        <field name="name">Sapphire Láser</field>
+        <field name="tech_category">equipo_medico</field>
+        <field name="tech_match_pattern">sapphire laser,sapphire diodo</field>
+        <field name="color">3</field>
+    </record>
+
+    <record id="tech_tag_sculptor" model="partner.technology.tag">
+        <field name="name">Sculptor CO2</field>
+        <field name="tech_category">equipo_medico</field>
+        <field name="tech_match_pattern">sculptor</field>
+        <field name="color">4</field>
+    </record>
+
+    <record id="tech_tag_nirvana" model="partner.technology.tag">
+        <field name="name">Nirvana Láser</field>
+        <field name="tech_category">equipo_medico</field>
+        <field name="tech_match_pattern">nirvana</field>
+        <field name="color">5</field>
+    </record>
+
+    <record id="tech_tag_spartan" model="partner.technology.tag">
+        <field name="name">Spartan Láser</field>
+        <field name="tech_category">equipo_medico</field>
+        <field name="tech_match_pattern">spartan</field>
+        <field name="color">6</field>
+    </record>
+
+    <record id="tech_tag_sonoage" model="partner.technology.tag">
+        <field name="name">SonoAge Ecógrafo</field>
+        <field name="tech_category">equipo_medico</field>
+        <field name="tech_match_pattern">sonoage</field>
+        <field name="color">7</field>
+    </record>
+
+    <record id="tech_tag_hemobye" model="partner.technology.tag">
+        <field name="name">HemoBye</field>
+        <field name="tech_category">equipo_medico</field>
+        <field name="tech_match_pattern">hemobye</field>
+        <field name="color">8</field>
+    </record>
+
+    <record id="tech_tag_evelab" model="partner.technology.tag">
+        <field name="name">Evelab Analyzer</field>
+        <field name="tech_category">equipo_medico</field>
+        <field name="tech_match_pattern">evelab,analyzer skin</field>
+        <field name="color">9</field>
+    </record>
+
+    <record id="tech_tag_crystal" model="partner.technology.tag">
+        <field name="name">Crystal Meso</field>
+        <field name="tech_category">equipo_medico</field>
+        <field name="tech_match_pattern">crystal injector,crystal meso</field>
+        <field name="color">10</field>
+    </record>
+
+    <record id="tech_tag_skypure" model="partner.technology.tag">
+        <field name="name">SkyPure</field>
+        <field name="tech_category">equipo_medico</field>
+        <field name="tech_match_pattern">skypure</field>
+        <field name="color">11</field>
+    </record>
+
+    <!-- ============================================ -->
+    <!-- MANIPULOS (12 tags)                          -->
+    <!-- ============================================ -->
+    <record id="tech_tag_manipulo_longpulse" model="partner.technology.tag">
+        <field name="name">Manipulo LongPulse 1064</field>
+        <field name="tech_category">manipulo</field>
+        <field name="tech_match_pattern">longpulse 1064,manipulo longpulse,lampara hp2 longpulse,lampara hp1 1064</field>
+        <field name="color">1</field>
+    </record>
+
+    <record id="tech_tag_manipulo_prodeep" model="partner.technology.tag">
+        <field name="name">Manipulo ProDeep 1340</field>
+        <field name="tech_category">manipulo</field>
+        <field name="tech_match_pattern">prodeep,lampara hp2 prodeep,lampara hp1 1340</field>
+        <field name="color">2</field>
+    </record>
+
+    <record id="tech_tag_manipulo_eryag" model="partner.technology.tag">
+        <field name="name">Manipulo Er:YAG 2940</field>
+        <field name="tech_category">manipulo</field>
+        <field name="tech_match_pattern">er:yag,2940 etherea,lampara hp1 2940</field>
+        <field name="color">3</field>
+    </record>
+
+    <record id="tech_tag_manipulo_ipl" model="partner.technology.tag">
+        <field name="name">Manipulo IPL</field>
+        <field name="tech_category">manipulo</field>
+        <field name="tech_match_pattern">iplsq,filtro ipl,lampara hp2 ipl,etherea mx ipl</field>
+        <field name="color">4</field>
+    </record>
+
+    <record id="tech_tag_manipulo_acroma" model="partner.technology.tag">
+        <field name="name">Manipulo Acroma-QS</field>
+        <field name="tech_category">manipulo</field>
+        <field name="tech_match_pattern">acroma</field>
+        <field name="color">5</field>
+    </record>
+
+    <record id="tech_tag_manipulo_hegels" model="partner.technology.tag">
+        <field name="name">Manipulo Hegels Diodo</field>
+        <field name="tech_category">manipulo</field>
+        <field name="tech_match_pattern">manipulo laser diodo hegels,manipulo hegels</field>
+        <field name="color">6</field>
+    </record>
+
+    <record id="tech_tag_manipulo_sapphire" model="partner.technology.tag">
+        <field name="name">Manipulo Sapphire</field>
+        <field name="tech_category">manipulo</field>
+        <field name="tech_match_pattern">sapphire manipulo,sapphire diodo 1200</field>
+        <field name="color">7</field>
+    </record>
+
+    <record id="tech_tag_manipulo_superflash" model="partner.technology.tag">
+        <field name="name">Manipulo SuperFlash</field>
+        <field name="tech_category">manipulo</field>
+        <field name="tech_match_pattern">manipulo superflash</field>
+        <field name="color">8</field>
+    </record>
+
+    <record id="tech_tag_manipulo_smartpuls" model="partner.technology.tag">
+        <field name="name">Manipulo SmartPuls</field>
+        <field name="tech_category">manipulo</field>
+        <field name="tech_match_pattern">manipulo smartpuls</field>
+        <field name="color">9</field>
+    </record>
+
+    <record id="tech_tag_manipulo_bbeauty" model="partner.technology.tag">
+        <field name="name">Manipulo B!Beauty</field>
+        <field name="tech_category">manipulo</field>
+        <field name="tech_match_pattern">manipulo corporal b!beauty,manipulo facial b!beauty,manipulo mixto b!beauty</field>
+        <field name="color">10</field>
+    </record>
+
+    <record id="tech_tag_manipulo_dermajet" model="partner.technology.tag">
+        <field name="name">Manipulo DermaJet</field>
+        <field name="tech_category">manipulo</field>
+        <field name="tech_match_pattern">manipulo dermajet</field>
+        <field name="color">11</field>
+    </record>
+
+    <record id="tech_tag_manipulo_thulium" model="partner.technology.tag">
+        <field name="name">Manipulo Thulium</field>
+        <field name="tech_category">manipulo</field>
+        <field name="tech_match_pattern">thulium</field>
+        <field name="color">1</field>
+    </record>
+
+</odoo>

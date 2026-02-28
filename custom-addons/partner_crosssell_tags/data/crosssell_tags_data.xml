@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="crosssell_tag_equipo_sin_consumibles" model="partner.crosssell.tag">
+        <field name="name">Equipo sin consumibles</field>
+        <field name="sequence">1</field>
+        <field name="has_pattern">fotoage,bluelift,dioxage,radioage,ledsmedical,hr-3,hr3,etherea,hegels,sapphire,dermajet,ultrajet,hidroage</field>
+        <field name="missing_pattern">plastico protector,agujas,canula,filtro,recambio,lampara hp</field>
+        <field name="color">1</field>
+    </record>
+
+    <record id="crosssell_tag_solo_cosmetica" model="partner.crosssell.tag">
+        <field name="name">Solo cosmetica (potencial equipo)</field>
+        <field name="sequence">2</field>
+        <field name="has_pattern">colagenox,hyalurox,vitaox,retinox,fotoskinox,skinox,meso ox,modelha,exo ox,dutaox</field>
+        <field name="missing_pattern">dispositivo,equipo,plataforma,fotoage completo,bluelift,dioxage,radioage,ledsmedical,hr-3,etherea,hegels,sapphire,dermajet,ultrajet</field>
+        <field name="color">2</field>
+    </record>
+
+    <record id="crosssell_tag_solo_equipo" model="partner.crosssell.tag">
+        <field name="name">Solo equipo (potencial cosmetica)</field>
+        <field name="sequence">3</field>
+        <field name="has_pattern">dispositivo,equipo,plataforma,fotoage completo</field>
+        <field name="missing_pattern">colagenox,hyalurox,vitaox,retinox,fotoskinox,skinox,meso ox,modelha,exo ox,dutaox,cream,crema,serum</field>
+        <field name="color">4</field>
+    </record>
+
+    <record id="crosssell_tag_cliente_360" model="partner.crosssell.tag">
+        <field name="name">Cliente 360</field>
+        <field name="sequence">4</field>
+        <field name="has_pattern">__cliente_360__</field>
+        <field name="missing_pattern"></field>
+        <field name="color">10</field>
+    </record>
+
+</odoo>

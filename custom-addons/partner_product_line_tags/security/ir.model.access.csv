@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_partner_product_line_tag_user,partner.product.line.tag.user,model_partner_product_line_tag,base.group_user,1,0,0,0
+access_partner_product_line_tag_sales,partner.product.line.tag.sales,model_partner_product_line_tag,sales_team.group_sale_salesman,1,1,1,0
+access_partner_product_line_tag_manager,partner.product.line.tag.manager,model_partner_product_line_tag,sales_team.group_sale_manager,1,1,1,1

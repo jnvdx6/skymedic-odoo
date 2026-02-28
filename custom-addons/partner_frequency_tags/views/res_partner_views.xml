@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Add frequency tags to partner form -->
+    <record id="view_partner_form_frequency_tags" model="ir.ui.view">
+        <field name="name">res.partner.form.frequency.tags</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="priority">53</field>
+        <field name="arch" type="xml">
+            <field name="category_id" position="after">
+                <label for="frequency_tag_ids"/>
+                <div class="d-flex align-items-center gap-2">
+                    <field name="frequency_tag_ids" widget="many2many_tags"
+                           options="{'color_field': 'color'}"
+                           placeholder="Frecuencia de compra..."
+                           class="flex-grow-1"/>
+                    <button name="action_recompute_frequency_tags" type="object"
+                            string="&#x27F3;" title="Actualizar frecuencia desde historial de ventas"
+                            class="btn btn-link p-0"/>
+                </div>
+            </field>
+        </field>
+    </record>
+
+    <!-- Add frequency tags filter to partner search -->
+    <record id="view_partner_search_frequency_tags" model="ir.ui.view">
+        <field name="name">res.partner.search.frequency.tags</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <field name="category_id" position="after">
+                <field name="frequency_tag_ids" string="Frecuencia Compra"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

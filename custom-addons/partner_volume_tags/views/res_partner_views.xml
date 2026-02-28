@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Add volume tags to partner form -->
+    <record id="view_partner_form_volume_tags" model="ir.ui.view">
+        <field name="name">res.partner.form.volume.tags</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="priority">52</field>
+        <field name="arch" type="xml">
+            <field name="category_id" position="after">
+                <label for="volume_tag_ids"/>
+                <div class="d-flex align-items-center gap-2">
+                    <field name="volume_tag_ids" widget="many2many_tags"
+                           options="{'color_field': 'color'}"
+                           placeholder="Volumen de compra..."
+                           class="flex-grow-1"/>
+                    <button name="action_recompute_volume_tags" type="object"
+                            string="&#x27f3;" title="Actualizar volumen desde historial de ventas"
+                            class="btn btn-link p-0"/>
+                </div>
+            </field>
+        </field>
+    </record>
+
+    <!-- Add volume tags filter to partner search -->
+    <record id="view_partner_search_volume_tags" model="ir.ui.view">
+        <field name="name">res.partner.search.volume.tags</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <field name="category_id" position="after">
+                <field name="volume_tag_ids" string="Volumen Compra"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

@@ -79,6 +79,57 @@
     />
 
     <!-- ============================================================ -->
+    <!-- ANÁLISIS / REPORTING                                          -->
+    <!-- ============================================================ -->
+    <menuitem
+        id="menu_shipping_reporting"
+        name="Análisis"
+        parent="menu_shipping_root"
+        sequence="50"
+        groups="stock.group_stock_user"
+    />
+
+    <menuitem
+        id="menu_shipping_report_general"
+        name="Análisis de envíos"
+        parent="menu_shipping_reporting"
+        action="action_shipping_report"
+        sequence="1"
+    />
+
+    <menuitem
+        id="menu_shipping_report_cost"
+        name="Análisis de costes"
+        parent="menu_shipping_reporting"
+        action="action_shipping_report_cost"
+        sequence="2"
+    />
+
+    <menuitem
+        id="menu_shipping_report_kpi"
+        name="KPIs por transportista"
+        parent="menu_shipping_reporting"
+        action="action_shipping_report_kpi"
+        sequence="3"
+    />
+
+    <menuitem
+        id="menu_shipping_dashboard"
+        name="Panel ejecutivo"
+        parent="menu_shipping_reporting"
+        action="action_shipping_dashboard"
+        sequence="4"
+    />
+
+    <menuitem
+        id="menu_shipping_monthly_report"
+        name="Informe mensual"
+        parent="menu_shipping_reporting"
+        action="action_shipping_monthly_report"
+        sequence="5"
+    />
+
+    <!-- ============================================================ -->
     <!-- CONFIGURACIÓN DE ENVÍOS                                       -->
     <!-- ============================================================ -->
     <menuitem

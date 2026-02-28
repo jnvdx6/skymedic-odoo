@@ -4,3 +4,8 @@ access_shipping_shipment_manager,shipping.shipment.manager,model_shipping_shipme
 access_shipping_label_user,shipping.label.user,model_shipping_label,stock.group_stock_user,1,1,1,0
 access_shipping_label_manager,shipping.label.manager,model_shipping_label,stock.group_stock_manager,1,1,1,1
 access_shipping_batch_wizard_user,shipping.batch.wizard.user,model_shipping_batch_wizard,stock.group_stock_user,1,1,1,1
+access_shipping_batch_send_wizard_user,shipping.batch.send.wizard.user,model_shipping_batch_send_wizard,stock.group_stock_user,1,1,1,1
+access_shipping_rate_compare_wizard_user,shipping.rate.compare.wizard.user,model_shipping_rate_compare_wizard,stock.group_stock_user,1,1,1,1
+access_shipping_rate_compare_line_user,shipping.rate.compare.line.user,model_shipping_rate_compare_line,stock.group_stock_user,1,1,1,1
+access_shipping_report_user,shipping.report.user,model_shipping_report,stock.group_stock_user,1,0,0,0
+access_shipping_report_manager,shipping.report.manager,model_shipping_report,stock.group_stock_manager,1,0,0,0

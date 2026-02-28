@@ -1,6 +1,8 @@
 import logging
 
 from odoo import _, fields, models
+from odoo.exceptions import UserError
+from odoo.osv import expression
 
 _logger = logging.getLogger(__name__)
 
@@ -73,33 +75,23 @@ class StockPicking(models.Model):
         """Find label PDFs from picking and create shipping.label records."""
         self.ensure_one()
         tracking = self.carrier_tracking_ref or ""
-        # Search for PDF labels attached to this picking matching the
-        # tracking reference or created today
         domain = [
             ("res_model", "=", "stock.picking"),
             ("res_id", "=", self.id),
             ("mimetype", "=", "application/pdf"),
+            ("name", "=like", "Label%"),
         ]
-        if tracking:
-            domain.append(("name", "=like", f"{tracking}%"))
-
         attachments = self.env["ir.attachment"].search(domain)
         if not attachments and tracking:
-            # Fallback: any PDF created today on this picking
             attachments = self.env["ir.attachment"].search([
                 ("res_model", "=", "stock.picking"),
                 ("res_id", "=", self.id),
                 ("mimetype", "=", "application/pdf"),
-                (
-                    "create_date",
-                    ">=",
-                    fields.Date.today(),
-                ),
+                ("name", "ilike", tracking),
             ])
 
         ShippingLabel = self.env["shipping.label"]
         for attachment in attachments:
-            # Copy attachment to shipment context
             new_att = attachment.copy({
                 "res_model": "shipping.shipment",
                 "res_id": shipment.id,
@@ -109,6 +101,98 @@ class StockPicking(models.Model):
                 "attachment_id": new_att.id,
                 "label_type": "shipping",
             })
+
+    def _link_return_labels_to_shipment(self, shipment, tracking_ref):
+        """Find return label attachments and link to return shipment."""
+        self.ensure_one()
+        domain = [
+            ("res_model", "=", "stock.picking"),
+            ("res_id", "=", self.id),
+            ("mimetype", "=", "application/pdf"),
+            ("name", "ilike", "RETURN"),
+        ]
+        if tracking_ref:
+            domain = expression.OR([
+                domain,
+                [
+                    ("res_model", "=", "stock.picking"),
+                    ("res_id", "=", self.id),
+                    ("mimetype", "=", "application/pdf"),
+                    ("name", "ilike", tracking_ref),
+                ],
+            ])
+        attachments = self.env["ir.attachment"].search(domain)
+        ShippingLabel = self.env["shipping.label"]
+        for attachment in attachments:
+            existing = ShippingLabel.search([
+                ("shipment_id", "=", shipment.id),
+                ("attachment_id", "=", attachment.id),
+            ], limit=1)
+            if existing:
+                continue
+            new_att = attachment.copy({
+                "res_model": "shipping.shipment",
+                "res_id": shipment.id,
+            })
+            ShippingLabel.create({
+                "shipment_id": shipment.id,
+                "attachment_id": new_att.id,
+                "label_type": "return",
+            })
+
+    # ---- Label download from picking ----
+
+    def action_download_shipping_label(self):
+        """Download the latest shipping label from linked shipments."""
+        self.ensure_one()
+        shipments = self.shipment_ids.filtered(
+            lambda s: s.label_ids and s.state != "cancelled"
+        )
+        if not shipments:
+            raise UserError(
+                _("No hay etiquetas de envío disponibles para este albarán.")
+            )
+        latest_label = self.env["shipping.label"]
+        for shipment in shipments:
+            labels = shipment.label_ids.filtered(
+                lambda l: l.label_type == "shipping"
+            )
+            if labels:
+                latest = labels.sorted("create_date", reverse=True)[0]
+                if (
+                    not latest_label
+                    or latest.create_date > latest_label.create_date
+                ):
+                    latest_label = latest
+        if not latest_label:
+            # Fallback: any label type
+            for shipment in shipments:
+                if shipment.label_ids:
+                    latest = shipment.label_ids.sorted(
+                        "create_date", reverse=True,
+                    )[0]
+                    if (
+                        not latest_label
+                        or latest.create_date > latest_label.create_date
+                    ):
+                        latest_label = latest
+        if not latest_label:
+            raise UserError(
+                _("No hay etiquetas de envío disponibles para este albarán.")
+            )
+        return latest_label.action_download()
+
+    # ---- Carrier comparison ----
+
+    def action_compare_carriers(self):
+        """Open the carrier rate comparison wizard."""
+        self.ensure_one()
+        wizard = self.env["shipping.rate.compare.wizard"].create({
+            "picking_id": self.id,
+        })
+        return wizard.action_compare_rates()
+
+    # ---- Navigation ----
 
     def action_view_shipments(self):
         """Open shipments linked to this picking."""

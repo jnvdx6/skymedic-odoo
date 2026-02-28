@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_shipping_batch_send_wizard_form" model="ir.ui.view">
+        <field name="name">shipping.batch.send.wizard.form</field>
+        <field name="model">shipping.batch.send.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Envío masivo">
+                <!-- Confirmation state -->
+                <group invisible="state != 'confirm'">
+                    <p class="text-muted" colspan="2">
+                        Se enviará al transportista los siguientes albaranes.
+                        Solo se incluyen albaranes validados con transportista
+                        asignado y sin número de seguimiento.
+                    </p>
+                    <field name="picking_count" string="Albaranes a enviar"/>
+                    <field name="picking_ids" widget="many2many_tags"
+                           readonly="1"/>
+                </group>
+                <!-- Done state (with errors) -->
+                <group invisible="state != 'done'">
+                    <field name="success_count"/>
+                    <field name="error_log" invisible="not error_log"/>
+                </group>
+                <field name="state" invisible="1"/>
+                <footer>
+                    <button name="action_send_all"
+                            string="Enviar todos"
+                            type="object"
+                            class="btn-primary"
+                            invisible="state != 'confirm'"/>
+                    <button string="Cerrar" class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Server action binding on stock.picking list -->
+    <record id="action_server_batch_send" model="ir.actions.server">
+        <field name="name">Envío masivo</field>
+        <field name="model_id" ref="stock.model_stock_picking"/>
+        <field name="binding_model_id" ref="stock.model_stock_picking"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    action = {
+        'type': 'ir.actions.act_window',
+        'name': 'Envío masivo',
+        'res_model': 'shipping.batch.send.wizard',
+        'view_mode': 'form',
+        'target': 'new',
+        'context': {'active_ids': records.ids},
+    }
+        </field>
+    </record>
+
+</odoo>

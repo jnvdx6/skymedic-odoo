@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Tree View -->
+    <record id="partner_trend_tag_view_list" model="ir.ui.view">
+        <field name="name">partner.trend.tag.list</field>
+        <field name="model">partner.trend.tag</field>
+        <field name="arch" type="xml">
+            <list string="Tags de Tendencia" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="trend_type"/>
+                <field name="color" widget="color_picker"/>
+                <field name="partner_count"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="partner_trend_tag_view_form" model="ir.ui.view">
+        <field name="name">partner.trend.tag.form</field>
+        <field name="model">partner.trend.tag</field>
+        <field name="arch" type="xml">
+            <form string="Tag de Tendencia">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="Nombre de la tendencia"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="trend_type"/>
+                        </group>
+                        <group>
+                            <field name="color" widget="color_picker"/>
+                            <field name="sequence"/>
+                            <field name="active"/>
+                            <field name="partner_count"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Clientes" name="partners">
+                            <field name="partner_ids" nolabel="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="city"/>
+                                    <field name="country_id"/>
+                                    <field name="phone"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_partner_trend_tag" model="ir.actions.act_window">
+        <field name="name">Tags de Tendencia</field>
+        <field name="res_model">partner.trend.tag</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Crear un tag de tendencia
+            </p>
+            <p>
+                Los tags de tendencia clasifican clientes según la evolución
+                de sus compras en los últimos meses.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem
+        id="menu_partner_trend_tag"
+        name="Tags de Tendencia"
+        parent="contacts.menu_contacts"
+        action="action_partner_trend_tag"
+        sequence="14"
+    />
+
+</odoo>

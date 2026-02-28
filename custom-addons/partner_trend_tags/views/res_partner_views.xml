@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Add trend tags to partner form -->
+    <record id="view_partner_form_trend_tags" model="ir.ui.view">
+        <field name="name">res.partner.form.trend.tags</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="priority">54</field>
+        <field name="arch" type="xml">
+            <field name="category_id" position="after">
+                <label for="trend_tag_ids"/>
+                <div class="d-flex align-items-center gap-2">
+                    <field name="trend_tag_ids" widget="many2many_tags"
+                           options="{'color_field': 'color'}"
+                           placeholder="Tendencia de compra..."
+                           class="flex-grow-1"/>
+                    <button name="action_recompute_trend_tags" type="object"
+                            string="&#x27F3;" title="Actualizar tendencia desde historial de ventas"
+                            class="btn btn-link p-0"/>
+                </div>
+            </field>
+        </field>
+    </record>
+
+    <!-- Add trend tags filter to partner search -->
+    <record id="view_partner_search_trend_tags" model="ir.ui.view">
+        <field name="name">res.partner.search.trend.tags</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <field name="category_id" position="after">
+                <field name="trend_tag_ids" string="Tendencia Compra"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

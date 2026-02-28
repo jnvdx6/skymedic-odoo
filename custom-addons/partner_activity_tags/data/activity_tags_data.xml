@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="activity_tag_0_3" model="partner.activity.tag">
+        <field name="name">Cliente 0-3 meses</field>
+        <field name="sequence">1</field>
+        <field name="months_from">0</field>
+        <field name="months_to">3</field>
+        <field name="color">10</field>
+    </record>
+
+    <record id="activity_tag_3_6" model="partner.activity.tag">
+        <field name="name">Cliente 3-6 meses</field>
+        <field name="sequence">2</field>
+        <field name="months_from">3</field>
+        <field name="months_to">6</field>
+        <field name="color">4</field>
+    </record>
+
+    <record id="activity_tag_6_12" model="partner.activity.tag">
+        <field name="name">Cliente 6-12 meses</field>
+        <field name="sequence">3</field>
+        <field name="months_from">6</field>
+        <field name="months_to">12</field>
+        <field name="color">2</field>
+    </record>
+
+    <record id="activity_tag_12_24" model="partner.activity.tag">
+        <field name="name">Cliente 12-24 meses</field>
+        <field name="sequence">4</field>
+        <field name="months_from">12</field>
+        <field name="months_to">24</field>
+        <field name="color">1</field>
+    </record>
+
+    <record id="activity_tag_24_plus" model="partner.activity.tag">
+        <field name="name">Cliente +24 meses</field>
+        <field name="sequence">5</field>
+        <field name="months_from">24</field>
+        <field name="months_to">0</field>
+        <field name="color">9</field>
+    </record>
+
+</odoo>

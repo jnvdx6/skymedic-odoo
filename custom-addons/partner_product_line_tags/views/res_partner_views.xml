@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Add product line tags to partner form -->
+    <record id="view_partner_form_product_line_tags" model="ir.ui.view">
+        <field name="name">res.partner.form.product.line.tags</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="priority">55</field>
+        <field name="arch" type="xml">
+            <field name="category_id" position="after">
+                <label for="product_line_tag_ids"/>
+                <div class="d-flex align-items-center gap-2">
+                    <field name="product_line_tag_ids" widget="many2many_tags"
+                           options="{'color_field': 'color'}"
+                           placeholder="Líneas de producto..."
+                           class="flex-grow-1"/>
+                    <button name="action_recompute_product_line_tags" type="object"
+                            string="&#x27F3;" title="Actualizar líneas de producto desde historial de ventas"
+                            class="btn btn-link p-0"/>
+                </div>
+            </field>
+        </field>
+    </record>
+
+    <!-- Add product line tags filter to partner search -->
+    <record id="view_partner_search_product_line_tags" model="ir.ui.view">
+        <field name="name">res.partner.search.product.line.tags</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <field name="category_id" position="after">
+                <field name="product_line_tag_ids" string="Línea de Producto"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

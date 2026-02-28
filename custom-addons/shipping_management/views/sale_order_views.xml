@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============================================================ -->
+    <!-- SALE ORDER LIST: columna shipping_state con badge            -->
+    <!-- ============================================================ -->
+    <record id="view_order_tree_shipping_state" model="ir.ui.view">
+        <field name="name">sale.order.list.shipping.management</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_tree"/>
+        <field name="arch" type="xml">
+            <field name="invoice_status" position="before">
+                <field
+                    name="shipping_state"
+                    string="Estado envío"
+                    widget="badge"
+                    decoration-danger="shipping_state == 'incident'"
+                    decoration-warning="shipping_state in ('in_transit', 'returned')"
+                    decoration-primary="shipping_state == 'confirmed'"
+                    decoration-info="shipping_state == 'draft'"
+                    decoration-success="shipping_state == 'delivered'"
+                    decoration-muted="shipping_state in ('cancelled', 'no_shipping')"
+                    optional="show"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- SALE ORDER SEARCH: filtros y group-by de shipping_state      -->
+    <!-- ============================================================ -->
+    <record id="sale_order_search_shipping_state" model="ir.ui.view">
+        <field name="name">sale.order.search.shipping.management</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.sale_order_view_search_inherit_sale"/>
+        <field name="arch" type="xml">
+            <filter name="order_date" position="after">
+                <separator/>
+                <filter name="filter_shipping_incident" string="Incidencia envío"
+                        domain="[('shipping_state', '=', 'incident')]"/>
+                <filter name="filter_shipping_in_transit" string="En tránsito"
+                        domain="[('shipping_state', '=', 'in_transit')]"/>
+                <filter name="filter_shipping_delivered" string="Envío entregado"
+                        domain="[('shipping_state', '=', 'delivered')]"/>
+                <filter name="filter_no_shipping" string="Sin envío"
+                        domain="[('shipping_state', '=', 'no_shipping')]"/>
+            </filter>
+            <filter name="order_month" position="after">
+                <filter name="group_by_shipping_state" string="Estado de envío"
+                        domain="[]" context="{'group_by': 'shipping_state'}"/>
+            </filter>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- QUOTATION LIST: columna shipping_state con badge             -->
+    <!-- Heredamos view_quotation_tree_with_onboarding porque es la   -->
+    <!-- vista que usan las acciones de presupuestos.                 -->
+    <!-- ============================================================ -->
+    <record id="view_quotation_tree_shipping_state" model="ir.ui.view">
+        <field name="name">sale.order.list.quotation.shipping.management</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_quotation_tree_with_onboarding"/>
+        <field name="arch" type="xml">
+            <field name="invoice_status" position="before">
+                <field
+                    name="shipping_state"
+                    string="Estado envío"
+                    widget="badge"
+                    decoration-danger="shipping_state == 'incident'"
+                    decoration-warning="shipping_state in ('in_transit', 'returned')"
+                    decoration-primary="shipping_state == 'confirmed'"
+                    decoration-info="shipping_state == 'draft'"
+                    decoration-success="shipping_state == 'delivered'"
+                    decoration-muted="shipping_state in ('cancelled', 'no_shipping')"
+                    optional="show"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- QUOTATION SEARCH: filtros y group-by de shipping_state       -->
+    <!-- ============================================================ -->
+    <record id="quotation_search_shipping_state" model="ir.ui.view">
+        <field name="name">sale.order.search.quotation.shipping.management</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.sale_order_view_search_inherit_quotation"/>
+        <field name="arch" type="xml">
+            <filter name="filter_create_date" position="after">
+                <separator/>
+                <filter name="filter_shipping_incident_q" string="Incidencia envío"
+                        domain="[('shipping_state', '=', 'incident')]"/>
+                <filter name="filter_shipping_in_transit_q" string="En tránsito"
+                        domain="[('shipping_state', '=', 'in_transit')]"/>
+                <filter name="filter_shipping_delivered_q" string="Envío entregado"
+                        domain="[('shipping_state', '=', 'delivered')]"/>
+                <filter name="filter_no_shipping_q" string="Sin envío"
+                        domain="[('shipping_state', '=', 'no_shipping')]"/>
+            </filter>
+            <filter name="order_month" position="after">
+                <filter name="group_by_shipping_state_q" string="Estado de envío"
+                        domain="[]" context="{'group_by': 'shipping_state'}"/>
+            </filter>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- SALE ORDER FORM: stat button + shipping tab                 -->
+    <!-- ============================================================ -->
+    <record id="view_sale_order_form_shipping" model="ir.ui.view">
+        <field name="name">sale.order.form.shipping.management</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button name="action_view_shipments"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-truck"
+                        invisible="shipment_count == 0">
+                    <div class="o_stat_info">
+                        <field name="shipment_count" class="o_stat_value"/>
+                        <span class="o_stat_text">Envíos</span>
+                    </div>
+                </button>
+            </div>
+            <page name="other_information" position="before">
+                <page string="Envíos" name="shipping_info"
+                      invisible="shipment_count == 0">
+                    <field name="shipment_ids" readonly="1">
+                        <list create="0" edit="0" delete="0">
+                            <field name="name" decoration-bf="1"/>
+                            <field name="carrier_id"/>
+                            <field name="tracking_ref"/>
+                            <field name="tracking_url" widget="url"
+                                   string="Seguimiento"/>
+                            <field name="state" widget="badge"
+                                   decoration-info="state == 'draft'"
+                                   decoration-primary="state == 'confirmed'"
+                                   decoration-warning="state == 'in_transit'"
+                                   decoration-danger="state in ('incident', 'returned')"
+                                   decoration-success="state == 'delivered'"/>
+                            <field name="sla_status" widget="badge"
+                                   decoration-success="sla_status == 'on_time'"
+                                   decoration-warning="sla_status == 'warning'"
+                                   decoration-danger="sla_status == 'overdue'"
+                                   optional="show"/>
+                            <field name="ship_date"/>
+                            <field name="delivery_date"/>
+                            <field name="shipping_cost" sum="Total"/>
+                        </list>
+                    </field>
+                </page>
+            </page>
+        </field>
+    </record>
+
+</odoo>

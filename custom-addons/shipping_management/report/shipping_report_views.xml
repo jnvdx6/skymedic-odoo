@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============================================================ -->
+    <!-- GRAPH: bar chart — estado × envíos + coste                   -->
+    <!-- ============================================================ -->
+    <record id="view_shipping_report_graph" model="ir.ui.view">
+        <field name="name">shipping.report.graph</field>
+        <field name="model">shipping.report</field>
+        <field name="arch" type="xml">
+            <graph string="Análisis de envíos" type="bar" sample="1">
+                <field name="state" type="row"/>
+                <field name="nbr" type="measure"/>
+                <field name="shipping_cost" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- PIVOT: transportista × estado × métricas                     -->
+    <!-- ============================================================ -->
+    <record id="view_shipping_report_pivot" model="ir.ui.view">
+        <field name="name">shipping.report.pivot</field>
+        <field name="model">shipping.report</field>
+        <field name="arch" type="xml">
+            <pivot string="Análisis de envíos" sample="1">
+                <field name="carrier_id" type="row"/>
+                <field name="state" type="col"/>
+                <field name="nbr" type="measure"/>
+                <field name="shipping_cost" type="measure"/>
+                <field name="delivery_days" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- LIST (read-only)                                             -->
+    <!-- ============================================================ -->
+    <record id="view_shipping_report_list" model="ir.ui.view">
+        <field name="name">shipping.report.list</field>
+        <field name="model">shipping.report</field>
+        <field name="arch" type="xml">
+            <list string="Análisis de envíos" create="0" edit="0"
+                  delete="0" default_order="ship_date desc">
+                <field name="shipment_id"/>
+                <field name="sale_order_id" optional="show"/>
+                <field name="partner_id"/>
+                <field name="carrier_id"/>
+                <field name="carrier_type" optional="hide"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-primary="state == 'confirmed'"
+                       decoration-warning="state == 'in_transit'"
+                       decoration-danger="state in ('incident', 'returned')"
+                       decoration-success="state == 'delivered'"/>
+                <field name="ship_date"/>
+                <field name="delivery_date" optional="hide"/>
+                <field name="delivery_days" optional="show"/>
+                <field name="shipping_cost" sum="Total"/>
+                <field name="number_of_packages" optional="hide" sum="Total"/>
+                <field name="shipping_weight" optional="hide" sum="Total"/>
+                <field name="country_id" optional="hide"/>
+                <field name="state_id" optional="hide"/>
+                <field name="dest_city" optional="hide"/>
+                <field name="dest_zip" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- SEARCH                                                       -->
+    <!-- ============================================================ -->
+    <record id="view_shipping_report_search" model="ir.ui.view">
+        <field name="name">shipping.report.search</field>
+        <field name="model">shipping.report</field>
+        <field name="arch" type="xml">
+            <search string="Análisis de envíos">
+                <field name="shipment_id"/>
+                <field name="partner_id"/>
+                <field name="carrier_id"/>
+                <field name="sale_order_id"/>
+                <separator/>
+                <filter name="filter_confirmed" string="Confirmado"
+                        domain="[('state', '=', 'confirmed')]"/>
+                <filter name="filter_in_transit" string="En tránsito"
+                        domain="[('state', '=', 'in_transit')]"/>
+                <filter name="filter_incident" string="Incidencia"
+                        domain="[('state', '=', 'incident')]"/>
+                <filter name="filter_delivered" string="Entregado"
+                        domain="[('state', '=', 'delivered')]"/>
+                <filter name="filter_returned" string="Devuelto"
+                        domain="[('state', '=', 'returned')]"/>
+                <filter name="filter_delivered_only" string="Solo entregados"
+                        domain="[('state', '=', 'delivered')]"/>
+                <separator/>
+                <filter name="filter_overdue" string="Fuera de plazo SLA"
+                        domain="[('is_overdue', '=', 1)]"/>
+                <filter name="filter_on_time" string="Entregas a tiempo"
+                        domain="[('is_on_time', '=', 1)]"/>
+                <filter name="filter_returns" string="Devoluciones"
+                        domain="[('is_return', '=', 1)]"/>
+                <separator/>
+                <filter name="filter_ship_date" date="ship_date_date"
+                        string="Fecha de envío"/>
+                <filter name="filter_month" string="Este mes"
+                        domain="[('ship_date_date', '&gt;=', context_today().strftime('%%Y-%%m-01'))]"/>
+                <filter name="filter_last_month" string="Mes anterior"
+                        domain="[
+                            ('ship_date_date', '&gt;=', (context_today() - relativedelta(months=1)).strftime('%%Y-%%m-01')),
+                            ('ship_date_date', '&lt;', context_today().strftime('%%Y-%%m-01'))
+                        ]"/>
+                <separator/>
+                <group name="groupby">
+                    <filter name="group_state" string="Estado"
+                            domain="[]" context="{'group_by': 'state'}"/>
+                    <filter name="group_carrier" string="Transportista"
+                            domain="[]" context="{'group_by': 'carrier_id'}"/>
+                    <filter name="group_carrier_type" string="Tipo transportista"
+                            domain="[]" context="{'group_by': 'carrier_type'}"/>
+                    <filter name="group_partner" string="Destinatario"
+                            domain="[]" context="{'group_by': 'partner_id'}"/>
+                    <filter name="group_country" string="País destino"
+                            domain="[]" context="{'group_by': 'country_id'}"/>
+                    <filter name="group_state_id" string="Provincia destino"
+                            domain="[]" context="{'group_by': 'state_id'}"/>
+                    <filter name="group_ship_month" string="Mes de envío"
+                            domain="[]"
+                            context="{'group_by': 'ship_date:month'}"/>
+                    <filter name="group_ship_week" string="Semana de envío"
+                            domain="[]"
+                            context="{'group_by': 'ship_date:week'}"/>
+                    <filter name="group_sale_order" string="Pedido de venta"
+                            domain="[]"
+                            context="{'group_by': 'sale_order_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- ACTION: Análisis de envíos (bar chart default)               -->
+    <!-- ============================================================ -->
+    <record id="action_shipping_report" model="ir.actions.act_window">
+        <field name="name">Análisis de envíos</field>
+        <field name="res_model">shipping.report</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="search_view_id" ref="view_shipping_report_search"/>
+        <field name="context">{'search_default_filter_month': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No hay datos de envíos para analizar
+            </p>
+        </field>
+    </record>
+
+    <record id="action_shipping_report_view_graph" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">graph</field>
+        <field name="view_id" ref="view_shipping_report_graph"/>
+        <field name="act_window_id" ref="action_shipping_report"/>
+    </record>
+
+    <record id="action_shipping_report_view_pivot" model="ir.actions.act_window.view">
+        <field name="sequence" eval="2"/>
+        <field name="view_mode">pivot</field>
+        <field name="view_id" ref="view_shipping_report_pivot"/>
+        <field name="act_window_id" ref="action_shipping_report"/>
+    </record>
+
+    <record id="action_shipping_report_view_list" model="ir.actions.act_window.view">
+        <field name="sequence" eval="3"/>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_shipping_report_list"/>
+        <field name="act_window_id" ref="action_shipping_report"/>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- ACTION: Análisis de costes (pie chart default)               -->
+    <!-- ============================================================ -->
+    <record id="action_shipping_report_cost" model="ir.actions.act_window">
+        <field name="name">Análisis de costes de envío</field>
+        <field name="res_model">shipping.report</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="search_view_id" ref="view_shipping_report_search"/>
+        <field name="context">{
+            'search_default_filter_month': 1,
+            'search_default_group_carrier': 1,
+        }</field>
+    </record>
+
+    <record id="view_shipping_report_cost_graph" model="ir.ui.view">
+        <field name="name">shipping.report.graph.cost</field>
+        <field name="model">shipping.report</field>
+        <field name="arch" type="xml">
+            <graph string="Costes de envío" type="pie" sample="1">
+                <field name="carrier_id" type="row"/>
+                <field name="shipping_cost" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="action_shipping_report_cost_view_graph" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">graph</field>
+        <field name="view_id" ref="view_shipping_report_cost_graph"/>
+        <field name="act_window_id" ref="action_shipping_report_cost"/>
+    </record>
+
+    <record id="action_shipping_report_cost_view_pivot" model="ir.actions.act_window.view">
+        <field name="sequence" eval="2"/>
+        <field name="view_mode">pivot</field>
+        <field name="view_id" ref="view_shipping_report_pivot"/>
+        <field name="act_window_id" ref="action_shipping_report_cost"/>
+    </record>
+
+    <record id="action_shipping_report_cost_view_list" model="ir.actions.act_window.view">
+        <field name="sequence" eval="3"/>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_shipping_report_list"/>
+        <field name="act_window_id" ref="action_shipping_report_cost"/>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- ACTION: KPIs por transportista (pivot default)               -->
+    <!-- ============================================================ -->
+    <record id="action_shipping_report_kpi" model="ir.actions.act_window">
+        <field name="name">KPIs por transportista</field>
+        <field name="res_model">shipping.report</field>
+        <field name="view_mode">pivot,graph,list</field>
+        <field name="search_view_id" ref="view_shipping_report_search"/>
+        <field name="context">{
+            'search_default_group_carrier': 1,
+        }</field>
+    </record>
+
+    <record id="view_shipping_report_kpi_pivot" model="ir.ui.view">
+        <field name="name">shipping.report.pivot.kpi</field>
+        <field name="model">shipping.report</field>
+        <field name="arch" type="xml">
+            <pivot string="KPIs por transportista" sample="1">
+                <field name="carrier_id" type="row"/>
+                <field name="nbr" type="measure"/>
+                <field name="is_delivered" type="measure"/>
+                <field name="is_on_time" type="measure"/>
+                <field name="is_incident" type="measure"/>
+                <field name="is_overdue" type="measure"/>
+                <field name="is_return" type="measure"/>
+                <field name="delivery_days" type="measure"/>
+                <field name="shipping_cost" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_shipping_report_kpi_view_pivot" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">pivot</field>
+        <field name="view_id" ref="view_shipping_report_kpi_pivot"/>
+        <field name="act_window_id" ref="action_shipping_report_kpi"/>
+    </record>
+
+    <record id="action_shipping_report_kpi_view_graph" model="ir.actions.act_window.view">
+        <field name="sequence" eval="2"/>
+        <field name="view_mode">graph</field>
+        <field name="view_id" ref="view_shipping_report_graph"/>
+        <field name="act_window_id" ref="action_shipping_report_kpi"/>
+    </record>
+
+    <record id="action_shipping_report_kpi_view_list" model="ir.actions.act_window.view">
+        <field name="sequence" eval="3"/>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_shipping_report_list"/>
+        <field name="act_window_id" ref="action_shipping_report_kpi"/>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- ACTION: Panel ejecutivo (bar chart by carrier)               -->
+    <!-- ============================================================ -->
+    <record id="action_shipping_dashboard" model="ir.actions.act_window">
+        <field name="name">Panel ejecutivo de envíos</field>
+        <field name="res_model">shipping.report</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="search_view_id" ref="view_shipping_report_search"/>
+        <field name="context">{
+            'search_default_filter_month': 1,
+            'search_default_group_carrier': 1,
+        }</field>
+    </record>
+
+    <record id="view_shipping_dashboard_graph" model="ir.ui.view">
+        <field name="name">shipping.report.graph.dashboard</field>
+        <field name="model">shipping.report</field>
+        <field name="arch" type="xml">
+            <graph string="Panel ejecutivo" type="bar" stacked="0" sample="1">
+                <field name="carrier_id" type="row"/>
+                <field name="nbr" type="measure"/>
+                <field name="is_on_time" type="measure"/>
+                <field name="is_incident" type="measure"/>
+                <field name="shipping_cost" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="action_shipping_dashboard_view_graph" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">graph</field>
+        <field name="view_id" ref="view_shipping_dashboard_graph"/>
+        <field name="act_window_id" ref="action_shipping_dashboard"/>
+    </record>
+
+    <record id="action_shipping_dashboard_view_pivot" model="ir.actions.act_window.view">
+        <field name="sequence" eval="2"/>
+        <field name="view_mode">pivot</field>
+        <field name="view_id" ref="view_shipping_report_kpi_pivot"/>
+        <field name="act_window_id" ref="action_shipping_dashboard"/>
+    </record>
+
+    <record id="action_shipping_dashboard_view_list" model="ir.actions.act_window.view">
+        <field name="sequence" eval="3"/>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_shipping_report_list"/>
+        <field name="act_window_id" ref="action_shipping_dashboard"/>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- ACTION: Informe mensual (export-ready list)                  -->
+    <!-- ============================================================ -->
+    <record id="action_shipping_monthly_report" model="ir.actions.act_window">
+        <field name="name">Informe mensual de envíos</field>
+        <field name="res_model">shipping.report</field>
+        <field name="view_mode">list,pivot,graph</field>
+        <field name="search_view_id" ref="view_shipping_report_search"/>
+        <field name="context">{
+            'search_default_filter_month': 1,
+        }</field>
+    </record>
+
+    <record id="view_shipping_report_export_list" model="ir.ui.view">
+        <field name="name">shipping.report.list.export</field>
+        <field name="model">shipping.report</field>
+        <field name="arch" type="xml">
+            <list string="Informe mensual de envíos" create="0" edit="0"
+                  delete="0" default_order="ship_date desc">
+                <field name="shipment_id"/>
+                <field name="sale_order_id"/>
+                <field name="partner_id"/>
+                <field name="carrier_id"/>
+                <field name="carrier_type"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-primary="state == 'confirmed'"
+                       decoration-warning="state == 'in_transit'"
+                       decoration-danger="state in ('incident', 'returned')"
+                       decoration-success="state == 'delivered'"/>
+                <field name="country_id"/>
+                <field name="state_id"/>
+                <field name="dest_city"/>
+                <field name="dest_zip"/>
+                <field name="ship_date"/>
+                <field name="delivery_date"/>
+                <field name="delivery_days"/>
+                <field name="sla_delivery_days"/>
+                <field name="is_on_time"/>
+                <field name="is_overdue"/>
+                <field name="is_incident"/>
+                <field name="is_return"/>
+                <field name="shipping_cost" sum="Total"/>
+                <field name="number_of_packages" sum="Total"/>
+                <field name="shipping_weight" sum="Total"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_shipping_monthly_report_view_list" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_shipping_report_export_list"/>
+        <field name="act_window_id" ref="action_shipping_monthly_report"/>
+    </record>
+
+    <record id="action_shipping_monthly_report_view_pivot" model="ir.actions.act_window.view">
+        <field name="sequence" eval="2"/>
+        <field name="view_mode">pivot</field>
+        <field name="view_id" ref="view_shipping_report_kpi_pivot"/>
+        <field name="act_window_id" ref="action_shipping_monthly_report"/>
+    </record>
+
+    <record id="action_shipping_monthly_report_view_graph" model="ir.actions.act_window.view">
+        <field name="sequence" eval="3"/>
+        <field name="view_mode">graph</field>
+        <field name="view_id" ref="view_shipping_report_graph"/>
+        <field name="act_window_id" ref="action_shipping_monthly_report"/>
+    </record>
+
+</odoo>

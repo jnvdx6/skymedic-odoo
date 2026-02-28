@@ -17,7 +17,7 @@
                         role="alert"
                         invisible="prod_environment"
                     >
-                        <i class="fa fa-exclamation-triangle" />
+                        <i class="fa fa-exclamation-triangle" title="Aviso" />
                         <strong> Entorno de pruebas</strong> -
                         Está usando credenciales de prueba. Cambie a
                         Entorno de Producción cuando esté listo.
@@ -29,7 +29,7 @@
                         role="alert"
                         invisible="not prod_environment"
                     >
-                        <i class="fa fa-check-circle" />
+                        <i class="fa fa-check-circle" title="Producción" />
                         <strong> Entorno de producción</strong> -
                         Los envíos se crearán en el sistema real de NACEX.
                     </div>
@@ -80,6 +80,7 @@
                                 name="nacex_packaging_code"
                                 required="delivery_type == 'nacex'"
                             />
+                            <field name="nacex_min_weight" />
                         </group>
                     </group>
 
@@ -87,8 +88,11 @@
                     <group string="Opciones" name="nacex_options">
                         <group>
                             <field name="nacex_with_return" />
+                            <field name="nacex_validate_address" />
                         </group>
-                        <group />
+                        <group>
+                            <field name="nacex_send_customer_email" />
+                        </group>
                     </group>
                 </page>
             </xpath>
