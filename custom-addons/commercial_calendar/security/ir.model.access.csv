@@ -1,7 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_followup_rule_salesman,commercial.followup.rule.salesman,model_commercial_followup_rule,sales_team.group_sale_salesman,1,0,0,0
-access_followup_rule_manager,commercial.followup.rule.manager,model_commercial_followup_rule,sales_team.group_sale_manager,1,1,1,1
-access_quick_log_salesman,commercial.quick.log.salesman,model_commercial_quick_log,sales_team.group_sale_salesman,1,1,1,1
-access_quick_log_line_salesman,commercial.quick.log.line.salesman,model_commercial_quick_log_line,sales_team.group_sale_salesman,1,1,1,1
-access_visit_planner_salesman,commercial.visit.planner.salesman,model_commercial_visit_planner,sales_team.group_sale_salesman,1,1,1,1
-access_visit_planner_line_salesman,commercial.visit.planner.line.salesman,model_commercial_visit_planner_line,sales_team.group_sale_salesman,1,1,1,1
