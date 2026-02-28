@@ -124,10 +124,6 @@
         <field name="model">res.partner</field>
         <field name="arch" type="xml">
             <search>
-                <field name="name"/>
-                <field name="city"/>
-                <field name="commercial_user_id"/>
-                <separator/>
                 <filter string="Mis Clientes" name="my_clients"
                     domain="[('commercial_user_id', '=', uid)]"/>
                 <separator/>
@@ -138,16 +134,10 @@
                 <filter string="Oportunidad Cross-sell" name="crosssell"
                     domain="[('commercial_alert_opportunity', '=', True)]"/>
                 <separator/>
-                <group expand="0" string="Agrupar por">
-                    <filter string="Volumen" name="group_volume"
-                        context="{'group_by': 'volume_tag_ids'}"/>
-                    <filter string="Tendencia" name="group_trend"
-                        context="{'group_by': 'trend_tag_ids'}"/>
-                    <filter string="Comercial" name="group_user"
-                        context="{'group_by': 'commercial_user_id'}"/>
-                    <filter string="Ciudad" name="group_city"
-                        context="{'group_by': 'city'}"/>
-                </group>
+                <filter string="Comercial" name="group_user"
+                    context="{'group_by': 'commercial_user_id'}"/>
+                <filter string="Ciudad" name="group_city"
+                    context="{'group_by': 'city'}"/>
             </search>
         </field>
     </record>

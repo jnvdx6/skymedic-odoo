@@ -33,7 +33,7 @@ class ResPartner(models.Model):
         string='Eventos Comerciales',
     )
     commercial_event_count = fields.Integer(
-        string='Eventos Comerciales',
+        string='Nº Eventos Comerciales',
         compute='_compute_commercial_event_count',
     )
     next_commercial_activity_date = fields.Date(
