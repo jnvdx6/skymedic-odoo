@@ -27,9 +27,9 @@
         "views/commercial_followup_rule_views.xml",
         "views/res_partner_views.xml",
         "views/commercial_portfolio_views.xml",
-        "views/commercial_calendar_menu.xml",
         "wizard/commercial_quick_log_views.xml",
         "wizard/commercial_visit_planner_views.xml",
+        "views/commercial_calendar_menu.xml",
     ],
     "assets": {
         "web.assets_backend": [
