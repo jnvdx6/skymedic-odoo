@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <!-- Commercial Calendar Action with commercial filter pre-applied -->
+    <record id="action_commercial_calendar" model="ir.actions.act_window">
+        <field name="name">Calendario Comercial</field>
+        <field name="res_model">calendar.event</field>
+        <field name="view_mode">calendar,list,form</field>
+        <field name="context">{
+            'search_default_commercial': 1,
+            'search_default_mymeetings': 1,
+        }</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No hay actividades comerciales programadas.
+            </p>
+            <p>Programa visitas, demos, formaciones y seguimientos comerciales.</p>
+        </field>
+    </record>
+
+    <!-- Add Commercial Calendar to Sales menu -->
+    <menuitem
+        id="menu_commercial_calendar"
+        name="Calendario Comercial"
+        parent="sale.sale_menu_root"
+        action="action_commercial_calendar"
+        sequence="5"
+        groups="sales_team.group_sale_salesman"/>
+
+</odoo>

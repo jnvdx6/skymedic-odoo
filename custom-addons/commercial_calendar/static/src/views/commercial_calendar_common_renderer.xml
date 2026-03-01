@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-inherit="calendar.AttendeeCalendarCommonRenderer.event" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('o_event_title')]" position="after">
+            <t t-if="record and record.is_commercial">
+                <span t-if="record.commercial_status === 'done'"
+                    class="text-success ms-1" title="Realizada">
+                    <i class="fa fa-check-circle"/>
+                </span>
+                <span t-if="record.commercial_status === 'overdue'"
+                    class="text-danger ms-1" title="Vencida">
+                    <i class="fa fa-exclamation-triangle"/>
+                </span>
+                <span t-if="record.commercial_feedback"
+                    class="text-muted ms-1" title="Con feedback">
+                    <i class="fa fa-comment"/>
+                </span>
+            </t>
+        </xpath>
+    </t>
+</templates>

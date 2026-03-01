@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <!-- Partner Form: Add commercial calendar buttons and tab -->
+    <record id="view_partner_form_commercial" model="ir.ui.view">
+        <field name="name">res.partner.form.commercial_calendar</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <!-- Stat buttons -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button class="oe_stat_button" type="object"
+                    name="action_view_commercial_events"
+                    icon="fa-briefcase">
+                    <field string="Act. Comerciales" name="commercial_event_count"
+                        widget="statinfo"/>
+                </button>
+            </xpath>
+
+            <!-- Commercial Activity Tab -->
+            <xpath expr="//page[@name='internal_notes']" position="after">
+                <page name="commercial_activities" string="Actividad Comercial">
+                    <group>
+                        <group string="Próxima Actividad">
+                            <field name="next_commercial_activity_date"/>
+                            <field name="next_commercial_activity_type"/>
+                        </group>
+                        <group string="Historial">
+                            <field name="last_commercial_activity_date"/>
+                            <field name="commercial_activity_summary" readonly="1"/>
+                        </group>
+                    </group>
+                    <separator string="Eventos Comerciales"/>
+                    <field name="commercial_event_ids" readonly="1">
+                        <list>
+                            <field name="name"/>
+                            <field name="commercial_activity_type_id" string="Tipo"/>
+                            <field name="start" string="Fecha"/>
+                            <field name="commercial_status" string="Estado"
+                                widget="badge"
+                                decoration-danger="commercial_status == 'overdue'"
+                                decoration-warning="commercial_status == 'today'"
+                                decoration-success="commercial_status == 'done'"
+                                decoration-info="commercial_status == 'planned'"/>
+                            <field name="user_id" widget="many2one_avatar_user"
+                                string="Responsable"/>
+                            <field name="commercial_feedback" optional="hide"
+                                string="Feedback"/>
+                        </list>
+                    </field>
+                    <div class="mt-3">
+                        <button string="Programar Actividad Comercial"
+                            type="object" name="action_schedule_commercial_activity"
+                            class="btn-primary" icon="fa-calendar-plus-o"/>
+                    </div>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Partner list view: add commercial fields -->
+    <record id="view_partner_tree_commercial" model="ir.ui.view">
+        <field name="name">res.partner.list.commercial_calendar</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='phone']" position="after">
+                <field name="next_commercial_activity_date" optional="hide"
+                    string="Próxima Act. Comercial"/>
+                <field name="next_commercial_activity_type" optional="hide"
+                    string="Tipo Act. Comercial"/>
+                <field name="commercial_event_count" optional="hide"
+                    string="Eventos Comerciales"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Partner search: add commercial filters -->
+    <record id="view_partner_search_commercial" model="ir.ui.view">
+        <field name="name">res.partner.search.commercial_calendar</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='inactive']" position="before">
+                <separator/>
+                <filter string="Con Actividad Comercial Pendiente" name="has_commercial_activity"
+                    domain="[('next_commercial_activity_date', '!=', False)]"/>
+                <filter string="Sin Actividad Comercial" name="no_commercial_activity"
+                    domain="[('commercial_event_ids', '=', False)]"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

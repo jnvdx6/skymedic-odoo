@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="event_type_visita" model="calendar.event.type">
+            <field name="name">Visita Comercial</field>
+        </record>
+        <record id="event_type_demo" model="calendar.event.type">
+            <field name="name">Demo</field>
+        </record>
+        <record id="event_type_formacion" model="calendar.event.type">
+            <field name="name">Formación</field>
+        </record>
+        <record id="event_type_llamada" model="calendar.event.type">
+            <field name="name">Llamada Comercial</field>
+        </record>
+        <record id="event_type_seguimiento" model="calendar.event.type">
+            <field name="name">Seguimiento</field>
+        </record>
+        <record id="event_type_presentacion" model="calendar.event.type">
+            <field name="name">Presentación</field>
+        </record>
+    </data>
+</odoo>
